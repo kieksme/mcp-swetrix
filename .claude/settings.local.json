@@ -8,7 +8,9 @@
       "Bash(git -C /Users/andrelademann/Development/kieksme/mcp-swetrix merge --ff-only claude/charming-bhabha-551a2e)",
       "Bash(git -C /Users/andrelademann/Development/kieksme/mcp-swetrix checkout -- .github/workflows/publish.yml .github/workflows/release-please.yml)",
       "Bash(rtk ls *)",
-      "Bash(rtk grep *)"
+      "Bash(rtk grep *)",
+      "Bash(sed -i '' 's/\"license\": \"MIT\"/\"license\": \"GPL-3.0-only\"/g' \\\\ *)",
+      "Bash(mkdir -p /Users/andrelademann/.claude/projects/-Users-andrelademann-Development-kieksme-mcp-swetrix/memory)"
     ]
   }
 }
