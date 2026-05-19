@@ -1,0 +1,74 @@
+name: Publish to npm
+
+# Triggered by pushing a version tag: git tag v1.2.3 && git push --tags
+# Or manually via workflow_dispatch to publish a specific package or all.
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "Package to publish (leave empty to publish all)"
+        required: false
+        type: choice
+        options:
+          - ""
+          - "@kieksme/mcp-swetrix-events"
+          - "@kieksme/mcp-swetrix-admin"
+          - "@kieksme/mcp-swetrix-statistics"
+
+permissions:
+  contents: read
+  id-token: write  # required for npm provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - package: "@kieksme/mcp-swetrix-events"
+            dir: packages/swetrix-events-mcp-server
+          - package: "@kieksme/mcp-swetrix-admin"
+            dir: packages/swetrix-admin-mcp-server
+          - package: "@kieksme/mcp-swetrix-statistics"
+            dir: packages/swetrix-statistics-mcp-server
+
+    name: "Publish ${{ matrix.package }}"
+
+    # Skip matrix entries not matching the manual input (when one package is selected)
+    if: >
+      github.event_name == 'push' ||
+      github.event.inputs.package == '' ||
+      github.event.inputs.package == matrix.package
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install dependencies
+        run: pnpm --filter "${{ matrix.package }}" install
+
+      - name: Typecheck
+        run: pnpm --filter "${{ matrix.package }}" typecheck
+
+      - name: Test
+        run: pnpm --filter "${{ matrix.package }}" test
+
+      - name: Build
+        run: pnpm --filter "${{ matrix.package }}" build
+
+      - name: Publish
+        run: pnpm --filter "${{ matrix.package }}" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
