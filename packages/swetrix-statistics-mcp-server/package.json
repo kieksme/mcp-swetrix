@@ -34,7 +34,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kieksme/mcp-swetix.git",
+    "url": "https://github.com/kieksme/mcp-swetrix.git",
     "directory": "packages/swetrix-statistics-mcp-server"
   },
   "homepage": "https://swetrix.com/docs/statistics-api",
