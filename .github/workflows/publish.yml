@@ -17,6 +17,7 @@ on:
 permissions:
   contents: read
   id-token: write
+  packages: write       # publish to GitHub Packages
 
 jobs:
   publish:
@@ -45,6 +46,17 @@ jobs:
 
       - run: pnpm --filter "${{ inputs.package }}" install
       - run: pnpm --filter "${{ inputs.package }}" test
-      - run: pnpm --filter "${{ inputs.package }}" publish --no-git-checks
+      - name: Publish to npm
+        run: pnpm --filter "${{ inputs.package }}" publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Publish to GitHub Packages
+        run: pnpm --filter "${{ inputs.package }}" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

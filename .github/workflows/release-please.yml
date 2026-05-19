@@ -3,7 +3,7 @@ name: Release Please
 # Runs on every push to main.
 # Release Please opens/updates a release PR per changed package.
 # When that PR is merged, it creates a GitHub Release and tag –
-# then this workflow publishes the affected package(s) to npm.
+# then this workflow publishes the affected package(s) to npm and GitHub Packages.
 on:
   push:
     branches: [main]
@@ -12,6 +12,7 @@ permissions:
   contents: write       # create releases & tags
   pull-requests: write  # open & update release PRs
   id-token: write       # npm provenance attestation
+  packages: write       # publish to GitHub Packages
 
 jobs:
   # ── Step 1: Run Release Please ────────────────────────────────────────────
@@ -46,9 +47,18 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - run: pnpm --filter "@kieksme/mcp-swetrix-events" install
       - run: pnpm --filter "@kieksme/mcp-swetrix-events" test
-      - run: pnpm --filter "@kieksme/mcp-swetrix-events" publish --no-git-checks
+      - name: Publish to npm
+        run: pnpm --filter "@kieksme/mcp-swetrix-events" publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://npm.pkg.github.com"
+      - name: Publish to GitHub Packages
+        run: pnpm --filter "@kieksme/mcp-swetrix-events" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ── Step 2b: Publish admin package ────────────────────────────────────────
   publish-admin:
@@ -67,9 +77,18 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - run: pnpm --filter "@kieksme/mcp-swetrix-admin" install
       - run: pnpm --filter "@kieksme/mcp-swetrix-admin" test
-      - run: pnpm --filter "@kieksme/mcp-swetrix-admin" publish --no-git-checks
+      - name: Publish to npm
+        run: pnpm --filter "@kieksme/mcp-swetrix-admin" publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://npm.pkg.github.com"
+      - name: Publish to GitHub Packages
+        run: pnpm --filter "@kieksme/mcp-swetrix-admin" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ── Step 2c: Publish statistics package ───────────────────────────────────
   publish-statistics:
@@ -88,6 +107,15 @@ jobs:
           registry-url: "https://registry.npmjs.org"
       - run: pnpm --filter "@kieksme/mcp-swetrix-statistics" install
       - run: pnpm --filter "@kieksme/mcp-swetrix-statistics" test
-      - run: pnpm --filter "@kieksme/mcp-swetrix-statistics" publish --no-git-checks
+      - name: Publish to npm
+        run: pnpm --filter "@kieksme/mcp-swetrix-statistics" publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://npm.pkg.github.com"
+      - name: Publish to GitHub Packages
+        run: pnpm --filter "@kieksme/mcp-swetrix-statistics" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
