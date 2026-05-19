@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-statistics-v1.1.0...mcp-swetrix-statistics1.1.1) (2026-05-19)
+
+
+### Bug Fixes
+
+* correct license to GPL-3.0-only in all package.json and README files ([6b89ba1](https://github.com/kieksme/mcp-swetrix/commit/6b89ba1d33f1dc5960958380caf970d20ee88356))
+
 ## [1.1.0](https://github.com/kieksme/mcp-swetix/compare/mcp-swetrix-statistics-v1.0.0...mcp-swetrix-statistics-v1.1.0) (2026-05-19)
 
 
