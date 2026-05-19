@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package:
+          - swetrix-events-mcp-server
+          # swetrix-statistics-mcp-server  # uncomment when implemented
+          # swetrix-admin-mcp-server        # uncomment when implemented
+
+    name: "${{ matrix.package }}"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --workspace=packages/${{ matrix.package }}
+
+      - name: Typecheck
+        run: npm run typecheck --workspace=packages/${{ matrix.package }}
+
+      - name: Build
+        run: npm run build --workspace=packages/${{ matrix.package }}
+
+      - name: Test
+        run: npm run test --workspace=packages/${{ matrix.package }}
+        env:
+          SWETRIX_API_KEY: ${{ secrets.SWETRIX_API_KEY }}
