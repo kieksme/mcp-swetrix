@@ -70,4 +70,4 @@ This project uses **trunk-based development** with [Release Please](https://gith
 
 ## License
 
-MIT
+GPL-3.0-only — see [LICENSE](LICENSE)

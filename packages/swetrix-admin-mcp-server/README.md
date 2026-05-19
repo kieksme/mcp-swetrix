@@ -102,4 +102,4 @@ claude mcp add swetrix-admin -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/mcp-
 
 ## License
 
-MIT
+GPL-3.0-only — see [LICENSE](../../LICENSE)

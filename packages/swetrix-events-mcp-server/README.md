@@ -72,4 +72,4 @@ Most tools only need the project ID (`pid`), not an API key.
 
 ## License
 
-MIT
+GPL-3.0-only — see [LICENSE](../../LICENSE)

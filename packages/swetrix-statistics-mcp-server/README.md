@@ -117,4 +117,4 @@ claude mcp add swetrix-statistics -e SWETRIX_API_KEY=your-key -- npx -y @kieksme
 
 ## License
 
-MIT
+GPL-3.0-only — see [LICENSE](../../LICENSE)
