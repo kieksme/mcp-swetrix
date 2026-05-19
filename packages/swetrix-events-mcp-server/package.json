@@ -1,0 +1,61 @@
+{
+  "name": "@kieksme/mcp-swetrix-events",
+  "version": "1.0.0",
+  "description": "MCP server for the Swetrix Events API – tracks pageviews, custom events, heartbeats, errors and revenue",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "mcp-swetrix-events": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "swetrix",
+    "analytics",
+    "tracking",
+    "events",
+    "claude"
+  ],
+  "author": "kieksme",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kieksme/mcp-swetix.git",
+    "directory": "packages/swetrix-events-mcp-server"
+  },
+  "homepage": "https://swetrix.com/docs/events-api",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "packageManager": "pnpm@10.33.2",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.6.1",
+    "axios": "^1.7.9",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "msw": "^2.7.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}

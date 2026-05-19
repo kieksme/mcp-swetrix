@@ -1,0 +1,19 @@
+{
+  "name": "mcp-swetix",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MCP servers for the Swetrix analytics platform",
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "clean": "pnpm -r clean"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=10"
+  }
+}

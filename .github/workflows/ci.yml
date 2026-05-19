@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - package: "@kieksme/mcp-swetrix-events"
+            dir: packages/swetrix-events-mcp-server
+          - package: "@kieksme/mcp-swetrix-admin"
+            dir: packages/swetrix-admin-mcp-server
+          - package: "@kieksme/mcp-swetrix-statistics"
+            dir: packages/swetrix-statistics-mcp-server
+
+    name: "${{ matrix.package }}"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm --filter "${{ matrix.package }}" install
+
+      - name: Typecheck
+        run: pnpm --filter "${{ matrix.package }}" typecheck
+
+      - name: Build
+        run: pnpm --filter "${{ matrix.package }}" build
+
+      - name: Test
+        run: pnpm --filter "${{ matrix.package }}" test
+        env:
+          SWETRIX_API_KEY: ${{ secrets.SWETRIX_API_KEY }}
