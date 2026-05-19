@@ -10,7 +10,8 @@
       "Bash(rtk ls *)",
       "Bash(rtk grep *)",
       "Bash(sed -i '' 's/\"license\": \"MIT\"/\"license\": \"GPL-3.0-only\"/g' \\\\ *)",
-      "Bash(mkdir -p /Users/andrelademann/.claude/projects/-Users-andrelademann-Development-kieksme-mcp-swetrix/memory)"
+      "Bash(mkdir -p /Users/andrelademann/.claude/projects/-Users-andrelademann-Development-kieksme-mcp-swetrix/memory)",
+      "Bash(git -C /Users/andrelademann/Development/kieksme/mcp-swetrix commit -m ' *)"
     ]
   }
 }
