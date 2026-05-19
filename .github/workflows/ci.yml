@@ -13,8 +13,8 @@ jobs:
       matrix:
         package:
           - swetrix-events-mcp-server
+          - swetrix-admin-mcp-server
           # swetrix-statistics-mcp-server  # uncomment when implemented
-          # swetrix-admin-mcp-server        # uncomment when implemented
 
     name: "${{ matrix.package }}"
 
