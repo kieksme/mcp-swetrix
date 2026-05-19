@@ -1,0 +1,93 @@
+name: Release Please
+
+# Runs on every push to main.
+# Release Please opens/updates a release PR per changed package.
+# When that PR is merged, it creates a GitHub Release and tag –
+# then this workflow publishes the affected package(s) to npm.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write       # create releases & tags
+  pull-requests: write  # open & update release PRs
+  id-token: write       # npm provenance attestation
+
+jobs:
+  # ── Step 1: Run Release Please ────────────────────────────────────────────
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      events_released:     ${{ steps.rp.outputs['packages/swetrix-events-mcp-server--release_created'] }}
+      admin_released:      ${{ steps.rp.outputs['packages/swetrix-admin-mcp-server--release_created'] }}
+      statistics_released: ${{ steps.rp.outputs['packages/swetrix-statistics-mcp-server--release_created'] }}
+    steps:
+      - uses: googleapis/release-please-action@v4
+        id: rp
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+  # ── Step 2a: Publish events package ───────────────────────────────────────
+  publish-events:
+    needs: release-please
+    if: needs.release-please.outputs.events_released == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+      - run: pnpm --filter "@kieksme/mcp-swetrix-events" install
+      - run: pnpm --filter "@kieksme/mcp-swetrix-events" test
+      - run: pnpm --filter "@kieksme/mcp-swetrix-events" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  # ── Step 2b: Publish admin package ────────────────────────────────────────
+  publish-admin:
+    needs: release-please
+    if: needs.release-please.outputs.admin_released == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+      - run: pnpm --filter "@kieksme/mcp-swetrix-admin" install
+      - run: pnpm --filter "@kieksme/mcp-swetrix-admin" test
+      - run: pnpm --filter "@kieksme/mcp-swetrix-admin" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  # ── Step 2c: Publish statistics package ───────────────────────────────────
+  publish-statistics:
+    needs: release-please
+    if: needs.release-please.outputs.statistics_released == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+      - run: pnpm --filter "@kieksme/mcp-swetrix-statistics" install
+      - run: pnpm --filter "@kieksme/mcp-swetrix-statistics" test
+      - run: pnpm --filter "@kieksme/mcp-swetrix-statistics" publish --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
