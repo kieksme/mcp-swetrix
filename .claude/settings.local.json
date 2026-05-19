@@ -3,7 +3,12 @@
     "allow": [
       "Bash(git remote *)",
       "Bash(rtk read *)",
-      "Bash(rtk git *)"
+      "Bash(rtk git *)",
+      "Bash(git -C /Users/andrelademann/Development/kieksme/mcp-swetrix checkout main)",
+      "Bash(git -C /Users/andrelademann/Development/kieksme/mcp-swetrix merge --ff-only claude/charming-bhabha-551a2e)",
+      "Bash(git -C /Users/andrelademann/Development/kieksme/mcp-swetrix checkout -- .github/workflows/publish.yml .github/workflows/release-please.yml)",
+      "Bash(rtk ls *)",
+      "Bash(rtk grep *)"
     ]
   }
 }
