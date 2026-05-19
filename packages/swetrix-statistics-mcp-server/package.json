@@ -1,6 +1,6 @@
 {
   "name": "@kieksme/mcp-swetrix-statistics",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "MCP server for the Swetrix Statistics API – read-only analytics queries",
   "type": "module",
   "main": "dist/index.js",
@@ -43,7 +43,9 @@
     "provenance": true
   },
   "packageManager": "pnpm@10.33.2",
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.6.1",
     "axios": "^1.7.9",
