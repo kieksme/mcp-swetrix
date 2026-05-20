@@ -66,16 +66,17 @@ jobs:
           STATISTICS_RELEASED: ${{ needs.release-please.outputs.statistics_released }}
           NODE_AUTH_TOKEN:     ${{ secrets.NPM_TOKEN }}
         run: |
-          publish() {
-            local name="$1" dir="$2"
+          pub() {
+            local name="$1"
             echo "▶ Publishing $name to npm…"
             pnpm --filter "$name" install
             pnpm --filter "$name" test
-            npm publish "$dir" --provenance --access public
+            # publishConfig.provenance: true in package.json requests the OIDC attestation
+            pnpm --filter "$name" publish --no-git-checks
           }
-          [[ "$EVENTS_RELEASED"     == "true" ]] && publish "@kieksme/swetrix-events-mcp"     packages/swetrix-events-mcp-server
-          [[ "$ADMIN_RELEASED"      == "true" ]] && publish "@kieksme/swetrix-admin-mcp"      packages/swetrix-admin-mcp-server
-          [[ "$STATISTICS_RELEASED" == "true" ]] && publish "@kieksme/swetrix-statistics-mcp" packages/swetrix-statistics-mcp-server
+          [[ "$EVENTS_RELEASED"     == "true" ]] && pub "@kieksme/swetrix-events-mcp"
+          [[ "$ADMIN_RELEASED"      == "true" ]] && pub "@kieksme/swetrix-admin-mcp"
+          [[ "$STATISTICS_RELEASED" == "true" ]] && pub "@kieksme/swetrix-statistics-mcp"
 
       - uses: actions/setup-node@v4
         with:
@@ -89,12 +90,12 @@ jobs:
           STATISTICS_RELEASED: ${{ needs.release-please.outputs.statistics_released }}
           NODE_AUTH_TOKEN:     ${{ secrets.GITHUB_TOKEN }}
         run: |
-          publish() {
-            local name="$1" dir="$2"
+          pub() {
+            local name="$1"
             echo "▶ Publishing $name to GitHub Packages…"
-            # --no-provenance: GitHub Packages does not support npm provenance
-            npm publish "$dir" --no-provenance --access public
+            # --no-provenance: GitHub Packages does not support npm provenance attestation
+            pnpm --filter "$name" publish --no-git-checks --no-provenance
           }
-          [[ "$EVENTS_RELEASED"     == "true" ]] && publish "@kieksme/swetrix-events-mcp"     packages/swetrix-events-mcp-server
-          [[ "$ADMIN_RELEASED"      == "true" ]] && publish "@kieksme/swetrix-admin-mcp"      packages/swetrix-admin-mcp-server
-          [[ "$STATISTICS_RELEASED" == "true" ]] && publish "@kieksme/swetrix-statistics-mcp" packages/swetrix-statistics-mcp-server
+          [[ "$EVENTS_RELEASED"     == "true" ]] && pub "@kieksme/swetrix-events-mcp"
+          [[ "$ADMIN_RELEASED"      == "true" ]] && pub "@kieksme/swetrix-admin-mcp"
+          [[ "$STATISTICS_RELEASED" == "true" ]] && pub "@kieksme/swetrix-statistics-mcp"
