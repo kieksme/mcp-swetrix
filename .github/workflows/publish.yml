@@ -57,6 +57,6 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
 
       - name: Publish to GitHub Packages
-        run: pnpm --filter "${{ inputs.package }}" publish --no-git-checks
+        run: pnpm --filter "${{ inputs.package }}" publish --no-git-checks --no-provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
