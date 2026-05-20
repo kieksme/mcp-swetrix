@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.1.3...mcp-swetrix-events1.1.4) (2026-05-20)
+
+
+### Bug Fixes
+
+* **ci:** verify end-to-end release and publish pipeline ([47b6cb1](https://github.com/kieksme/mcp-swetrix/commit/47b6cb1a00ccef007cffa5486a2c5a42b4889f9e))
+
 ## [1.1.3](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.1.2...mcp-swetrix-events1.1.3) (2026-05-20)
 
 
