@@ -1,4 +1,4 @@
-# @kieksme/mcp-swetrix-events
+# @kieksme/swetrix-events-mcp
 
 MCP server for the [Swetrix Events API](https://swetrix.com/docs/events-api) — 5 tools for tracking pageviews, custom events, heartbeats, errors, and revenue from AI assistants.
 
@@ -13,7 +13,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "swetrix-events": {
       "command": "npx",
-      "args": ["-y", "@kieksme/mcp-swetrix-events"]
+      "args": ["-y", "@kieksme/swetrix-events-mcp"]
     }
   }
 }
@@ -26,7 +26,7 @@ For revenue tracking, add your API key:
   "mcpServers": {
     "swetrix-events": {
       "command": "npx",
-      "args": ["-y", "@kieksme/mcp-swetrix-events"],
+      "args": ["-y", "@kieksme/swetrix-events-mcp"],
       "env": {
         "SWETRIX_API_KEY": "your-api-key"
       }
@@ -39,10 +39,10 @@ For revenue tracking, add your API key:
 
 ```bash
 # Without revenue tracking
-claude mcp add swetrix-events -- npx -y @kieksme/mcp-swetrix-events
+claude mcp add swetrix-events -- npx -y @kieksme/swetrix-events-mcp
 
 # With revenue tracking
-claude mcp add swetrix-events -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/mcp-swetrix-events
+claude mcp add swetrix-events -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/swetrix-events-mcp
 ```
 
 ### Environment variables

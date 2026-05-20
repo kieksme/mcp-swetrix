@@ -5,19 +5,19 @@
   "packages": {
     "packages/swetrix-events-mcp-server": {
       "release-type": "node",
-      "package-name": "@kieksme/mcp-swetrix-events",
+      "package-name": "@kieksme/swetrix-events-mcp",
       "component": "mcp-swetrix-events",
       "changelog-path": "CHANGELOG.md"
     },
     "packages/swetrix-admin-mcp-server": {
       "release-type": "node",
-      "package-name": "@kieksme/mcp-swetrix-admin",
+      "package-name": "@kieksme/swetrix-admin-mcp",
       "component": "mcp-swetrix-admin",
       "changelog-path": "CHANGELOG.md"
     },
     "packages/swetrix-statistics-mcp-server": {
       "release-type": "node",
-      "package-name": "@kieksme/mcp-swetrix-statistics",
+      "package-name": "@kieksme/swetrix-statistics-mcp",
       "component": "mcp-swetrix-statistics",
       "changelog-path": "CHANGELOG.md"
     }

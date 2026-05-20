@@ -27,9 +27,9 @@ on:
         required: true
         type: choice
         options:
-          - "@kieksme/mcp-swetrix-events"
-          - "@kieksme/mcp-swetrix-admin"
-          - "@kieksme/mcp-swetrix-statistics"
+          - "@kieksme/swetrix-events-mcp"
+          - "@kieksme/swetrix-admin-mcp"
+          - "@kieksme/swetrix-statistics-mcp"
       runner:
         description: "Runner override (e.g. self-hosted or ubuntu-latest)"
         required: false
@@ -53,11 +53,11 @@ jobs:
           if [[ "${{ github.event_name }}" == "push" ]]; then
             TAG="${GITHUB_REF_NAME}"
             if [[ "$TAG" == mcp-swetrix-events* ]]; then
-              echo "name=@kieksme/mcp-swetrix-events" >> "$GITHUB_OUTPUT"
+              echo "name=@kieksme/swetrix-events-mcp" >> "$GITHUB_OUTPUT"
             elif [[ "$TAG" == mcp-swetrix-admin* ]]; then
-              echo "name=@kieksme/mcp-swetrix-admin" >> "$GITHUB_OUTPUT"
+              echo "name=@kieksme/swetrix-admin-mcp" >> "$GITHUB_OUTPUT"
             elif [[ "$TAG" == mcp-swetrix-statistics* ]]; then
-              echo "name=@kieksme/mcp-swetrix-statistics" >> "$GITHUB_OUTPUT"
+              echo "name=@kieksme/swetrix-statistics-mcp" >> "$GITHUB_OUTPUT"
             else
               echo "Unknown tag: $TAG" && exit 1
             fi

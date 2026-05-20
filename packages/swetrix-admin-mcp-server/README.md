@@ -1,4 +1,4 @@
-# @kieksme/mcp-swetrix-admin
+# @kieksme/swetrix-admin-mcp
 
 MCP server for the [Swetrix Admin API](https://swetrix.com/docs/admin-api) — 34 tools for managing projects, funnels, annotations, views, and organisations.
 
@@ -15,7 +15,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "swetrix-admin": {
       "command": "npx",
-      "args": ["-y", "@kieksme/mcp-swetrix-admin"],
+      "args": ["-y", "@kieksme/swetrix-admin-mcp"],
       "env": {
         "SWETRIX_API_KEY": "your-api-key"
       }
@@ -27,7 +27,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ### Claude Code
 
 ```bash
-claude mcp add swetrix-admin -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/mcp-swetrix-admin
+claude mcp add swetrix-admin -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/swetrix-admin-mcp
 ```
 
 ### Environment variables
