@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-admin1.1.1...mcp-swetrix-admin1.1.2) (2026-05-20)
+
+
+### Bug Fixes
+
+* normalize repository URL to git+https in all package.json files ([0700b9f](https://github.com/kieksme/mcp-swetrix/commit/0700b9f00fb175c092404943e0acf2e7dda18a6c))
+
 ## [1.1.1](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-admin-v1.1.0...mcp-swetrix-admin1.1.1) (2026-05-19)
 
 
