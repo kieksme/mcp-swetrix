@@ -1,25 +1,25 @@
 name: Publish
 
-# Triggered automatically when release-please pushes a version tag,
+# Triggered automatically when release-please publishes a GitHub Release,
 # or manually for emergency re-publishes.
 #
 # Runner selection (three levels, first match wins):
-#   1. workflow_dispatch input  `runner`       – per-run override
+#   1. workflow_dispatch input  `runner`        – per-run override
 #   2. repository variable      PUBLISH_RUNNER  – set in Settings → Variables
 #   3. fallback                 ubuntu-latest
 #
 # Self-hosted requirements:
-#   - Node.js ≥ 20 and pnpm ≥ 10 installed, OR leave setup to the actions below
 #   - Network access to registry.npmjs.org and npm.pkg.github.com
 #   - Network access to token.actions.githubusercontent.com (OIDC for npm provenance)
-#     If OIDC is unavailable, set publishConfig.provenance to false in each package.json
-#     and remove the id-token: write permission.
+#     If OIDC is unavailable, set publishConfig.provenance to false in each
+#     package.json and remove the id-token: write permission below.
+#
+# NPM_TOKEN must be an Automation token (npmjs.com → Access Tokens) scoped to
+# the @kieksme org. A Granular token cannot publish packages created after the
+# token was issued.
 on:
-  push:
-    tags:
-      - 'mcp-swetrix-events*'
-      - 'mcp-swetrix-admin*'
-      - 'mcp-swetrix-statistics*'
+  release:
+    types: [published]
   workflow_dispatch:
     inputs:
       package:
@@ -47,11 +47,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Resolve package name
+      - name: Resolve package name and directory
         id: pkg
         run: |
-          NAME=""
-          if [[ "${{ github.event_name }}" == "push" ]]; then
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            # release-please tag format: <component><version>  e.g. mcp-swetrix-events1.2.0
             TAG="${GITHUB_REF_NAME}"
             if [[ "$TAG" == mcp-swetrix-events* ]]; then
               NAME="@kieksme/swetrix-events-mcp"
@@ -60,29 +60,21 @@ jobs:
             elif [[ "$TAG" == mcp-swetrix-statistics* ]]; then
               NAME="@kieksme/swetrix-statistics-mcp"
             else
-              echo "Unknown tag: $TAG" && exit 1
+              echo "Release tag '$TAG' does not match any known package — skipping." && exit 0
             fi
           else
             NAME="${{ inputs.package }}"
           fi
 
           case "$NAME" in
-            "@kieksme/swetrix-events-mcp")
-              DIR="packages/swetrix-events-mcp-server"
-              ;;
-            "@kieksme/swetrix-admin-mcp")
-              DIR="packages/swetrix-admin-mcp-server"
-              ;;
-            "@kieksme/swetrix-statistics-mcp")
-              DIR="packages/swetrix-statistics-mcp-server"
-              ;;
-            *)
-              echo "Unknown package: $NAME" && exit 1
-              ;;
+            "@kieksme/swetrix-events-mcp")     DIR="packages/swetrix-events-mcp-server" ;;
+            "@kieksme/swetrix-admin-mcp")      DIR="packages/swetrix-admin-mcp-server"  ;;
+            "@kieksme/swetrix-statistics-mcp") DIR="packages/swetrix-statistics-mcp-server" ;;
+            *) echo "Unknown package: $NAME" && exit 1 ;;
           esac
 
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
-          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
+          echo "dir=$DIR"   >> "$GITHUB_OUTPUT"
 
       - uses: pnpm/action-setup@v4
         with:
@@ -100,6 +92,8 @@ jobs:
       - name: Publish to npm
         working-directory: ${{ steps.pkg.outputs.dir }}
         run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -107,8 +101,8 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
 
       - name: Publish to GitHub Packages
-        # --provenance=false: GitHub Packages does not support npm provenance attestation
+        # --no-provenance: GitHub Packages does not support npm provenance attestation
         working-directory: ${{ steps.pkg.outputs.dir }}
-        run: npm publish --registry=https://npm.pkg.github.com --provenance=false
+        run: npm publish --no-provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
