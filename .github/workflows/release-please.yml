@@ -4,6 +4,12 @@ name: Release Please
 # Release Please opens/updates a release PR per changed package.
 # When that PR is merged, it creates a GitHub Release and tag –
 # which automatically triggers publish.yml for the affected package.
+#
+# Runner selection:
+#   repository variable RELEASE_PLEASE_RUNNER  – set in Settings → Variables
+#   fallback:           ubuntu-latest
+#   Note: this job only calls the GitHub API; a self-hosted runner is rarely needed
+#   unless the environment enforces outbound traffic through a corporate proxy.
 on:
   push:
     branches: [main]
@@ -14,7 +20,7 @@ permissions:
 
 jobs:
   release-please:
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.RELEASE_PLEASE_RUNNER || 'ubuntu-latest' }}
     steps:
       - uses: googleapis/release-please-action@v4
         with:

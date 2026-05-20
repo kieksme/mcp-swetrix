@@ -2,6 +2,18 @@ name: Publish
 
 # Triggered automatically when release-please pushes a version tag,
 # or manually for emergency re-publishes.
+#
+# Runner selection (three levels, first match wins):
+#   1. workflow_dispatch input  `runner`       – per-run override
+#   2. repository variable      PUBLISH_RUNNER  – set in Settings → Variables
+#   3. fallback                 ubuntu-latest
+#
+# Self-hosted requirements:
+#   - Node.js ≥ 20 and pnpm ≥ 10 installed, OR leave setup to the actions below
+#   - Network access to registry.npmjs.org and npm.pkg.github.com
+#   - Network access to token.actions.githubusercontent.com (OIDC for npm provenance)
+#     If OIDC is unavailable, set publishConfig.provenance to false in each package.json
+#     and remove the id-token: write permission.
 on:
   push:
     tags:
@@ -18,15 +30,20 @@ on:
           - "@kieksme/mcp-swetrix-events"
           - "@kieksme/mcp-swetrix-admin"
           - "@kieksme/mcp-swetrix-statistics"
+      runner:
+        description: "Runner override (e.g. self-hosted or ubuntu-latest)"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
-  id-token: write       # npm provenance attestation
-  packages: write       # publish to GitHub Packages
+  id-token: write   # OIDC token for npm provenance — requires token.actions.githubusercontent.com
+  packages: write   # publish to GitHub Packages
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner || vars.PUBLISH_RUNNER || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -72,6 +89,7 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
 
       - name: Publish to GitHub Packages
+        # --no-provenance: GitHub Packages does not support npm provenance attestation
         run: pnpm --filter "${{ steps.pkg.outputs.name }}" publish --no-git-checks --no-provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
