@@ -1,8 +1,25 @@
-name: Publish (manual)
+name: Publish
 
-# Emergency / re-publish workflow.
-# Normal publishing is handled automatically by release-please.yml.
+# Triggered automatically when release-please pushes a version tag,
+# or manually for emergency re-publishes.
+#
+# Runner selection (three levels, first match wins):
+#   1. workflow_dispatch input  `runner`       – per-run override
+#   2. repository variable      PUBLISH_RUNNER  – set in Settings → Variables
+#   3. fallback                 ubuntu-latest
+#
+# Self-hosted requirements:
+#   - Node.js ≥ 20 and pnpm ≥ 10 installed, OR leave setup to the actions below
+#   - Network access to registry.npmjs.org and npm.pkg.github.com
+#   - Network access to token.actions.githubusercontent.com (OIDC for npm provenance)
+#     If OIDC is unavailable, set publishConfig.provenance to false in each package.json
+#     and remove the id-token: write permission.
 on:
+  push:
+    tags:
+      - 'mcp-swetrix-events*'
+      - 'mcp-swetrix-admin*'
+      - 'mcp-swetrix-statistics*'
   workflow_dispatch:
     inputs:
       package:
@@ -13,17 +30,40 @@ on:
           - "@kieksme/mcp-swetrix-events"
           - "@kieksme/mcp-swetrix-admin"
           - "@kieksme/mcp-swetrix-statistics"
+      runner:
+        description: "Runner override (e.g. self-hosted or ubuntu-latest)"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: read
-  id-token: write
-  packages: write       # publish to GitHub Packages
+  id-token: write   # OIDC token for npm provenance — requires token.actions.githubusercontent.com
+  packages: write   # publish to GitHub Packages
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ${{ inputs.runner || vars.PUBLISH_RUNNER || 'ubuntu-latest' }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Resolve package name
+        id: pkg
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            TAG="${GITHUB_REF_NAME}"
+            if [[ "$TAG" == mcp-swetrix-events* ]]; then
+              echo "name=@kieksme/mcp-swetrix-events" >> "$GITHUB_OUTPUT"
+            elif [[ "$TAG" == mcp-swetrix-admin* ]]; then
+              echo "name=@kieksme/mcp-swetrix-admin" >> "$GITHUB_OUTPUT"
+            elif [[ "$TAG" == mcp-swetrix-statistics* ]]; then
+              echo "name=@kieksme/mcp-swetrix-statistics" >> "$GITHUB_OUTPUT"
+            else
+              echo "Unknown tag: $TAG" && exit 1
+            fi
+          else
+            echo "name=${{ inputs.package }}" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: pnpm/action-setup@v4
         with:
@@ -35,19 +75,11 @@ jobs:
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
 
-      - name: Resolve directory
-        id: dir
-        run: |
-          case "${{ inputs.package }}" in
-            "@kieksme/mcp-swetrix-events")     echo "path=packages/swetrix-events-mcp-server" >> "$GITHUB_OUTPUT" ;;
-            "@kieksme/mcp-swetrix-admin")      echo "path=packages/swetrix-admin-mcp-server"  >> "$GITHUB_OUTPUT" ;;
-            "@kieksme/mcp-swetrix-statistics") echo "path=packages/swetrix-statistics-mcp-server" >> "$GITHUB_OUTPUT" ;;
-          esac
+      - run: pnpm --filter "${{ steps.pkg.outputs.name }}" install
+      - run: pnpm --filter "${{ steps.pkg.outputs.name }}" test
 
-      - run: pnpm --filter "${{ inputs.package }}" install
-      - run: pnpm --filter "${{ inputs.package }}" test
       - name: Publish to npm
-        run: pnpm --filter "${{ inputs.package }}" publish --no-git-checks
+        run: pnpm --filter "${{ steps.pkg.outputs.name }}" publish --no-git-checks
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -57,6 +89,7 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
 
       - name: Publish to GitHub Packages
-        run: pnpm --filter "${{ inputs.package }}" publish --no-git-checks --no-provenance
+        # --no-provenance: GitHub Packages does not support npm provenance attestation
+        run: pnpm --filter "${{ steps.pkg.outputs.name }}" publish --no-git-checks --no-provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
