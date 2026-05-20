@@ -87,7 +87,7 @@ pnpm --filter @kieksme/mcp-swetrix-statistics build
 Publishing is **fully automated** — never run `pnpm publish` manually except via the emergency `publish.yml` workflow dispatch.
 
 Packages are published to two registries on every release:
-- **npm**: `https://registry.npmjs.org` (requires `NPM_TOKEN` secret)
+- **npm**: `https://registry.npmjs.org` (via GitHub Actions trusted publishing / OIDC)
 - **GitHub Packages**: `https://npm.pkg.github.com` (uses `GITHUB_TOKEN`, no extra secret)
 
 ## What agents should not do
