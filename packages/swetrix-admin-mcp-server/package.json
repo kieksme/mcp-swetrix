@@ -34,7 +34,7 @@
   "license": "GPL-3.0-only",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kieksme/mcp-swetrix.git",
+    "url": "git+https://github.com/kieksme/mcp-swetrix.git",
     "directory": "packages/swetrix-admin-mcp-server"
   },
   "homepage": "https://swetrix.com/docs/admin-api",
