@@ -50,20 +50,39 @@ jobs:
       - name: Resolve package name
         id: pkg
         run: |
+          NAME=""
           if [[ "${{ github.event_name }}" == "push" ]]; then
             TAG="${GITHUB_REF_NAME}"
             if [[ "$TAG" == mcp-swetrix-events* ]]; then
-              echo "name=@kieksme/swetrix-events-mcp" >> "$GITHUB_OUTPUT"
+              NAME="@kieksme/swetrix-events-mcp"
             elif [[ "$TAG" == mcp-swetrix-admin* ]]; then
-              echo "name=@kieksme/swetrix-admin-mcp" >> "$GITHUB_OUTPUT"
+              NAME="@kieksme/swetrix-admin-mcp"
             elif [[ "$TAG" == mcp-swetrix-statistics* ]]; then
-              echo "name=@kieksme/swetrix-statistics-mcp" >> "$GITHUB_OUTPUT"
+              NAME="@kieksme/swetrix-statistics-mcp"
             else
               echo "Unknown tag: $TAG" && exit 1
             fi
           else
-            echo "name=${{ inputs.package }}" >> "$GITHUB_OUTPUT"
+            NAME="${{ inputs.package }}"
           fi
+
+          case "$NAME" in
+            "@kieksme/swetrix-events-mcp")
+              DIR="packages/swetrix-events-mcp-server"
+              ;;
+            "@kieksme/swetrix-admin-mcp")
+              DIR="packages/swetrix-admin-mcp-server"
+              ;;
+            "@kieksme/swetrix-statistics-mcp")
+              DIR="packages/swetrix-statistics-mcp-server"
+              ;;
+            *)
+              echo "Unknown package: $NAME" && exit 1
+              ;;
+          esac
+
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "dir=$DIR" >> "$GITHUB_OUTPUT"
 
       - uses: pnpm/action-setup@v4
         with:
@@ -79,9 +98,8 @@ jobs:
       - run: pnpm --filter "${{ steps.pkg.outputs.name }}" test
 
       - name: Publish to npm
-        run: pnpm --filter "${{ steps.pkg.outputs.name }}" publish --no-git-checks
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: npm publish --provenance --access public
 
       - uses: actions/setup-node@v4
         with:
@@ -89,7 +107,8 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
 
       - name: Publish to GitHub Packages
-        # --no-provenance: GitHub Packages does not support npm provenance attestation
-        run: pnpm --filter "${{ steps.pkg.outputs.name }}" publish --no-git-checks --no-provenance
+        # --provenance=false: GitHub Packages does not support npm provenance attestation
+        working-directory: ${{ steps.pkg.outputs.dir }}
+        run: npm publish --registry=https://npm.pkg.github.com --provenance=false
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
