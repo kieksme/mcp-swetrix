@@ -9,7 +9,7 @@ import { registerErrorEventTool } from "./tools/error-event.js";
 import { registerRevenueTool } from "./tools/revenue.js";
 
 const server = new McpServer({
-  name: "swetrix-events-mcp-server",
+  name: "swetrix-events-mcp",
   version: "1.0.0",
 });
 
