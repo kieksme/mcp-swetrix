@@ -12,11 +12,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - package: "@kieksme/mcp-swetrix-events"
+          - package: "@kieksme/swetrix-events-mcp"
             dir: packages/swetrix-events-mcp-server
-          - package: "@kieksme/mcp-swetrix-admin"
+          - package: "@kieksme/swetrix-admin-mcp"
             dir: packages/swetrix-admin-mcp-server
-          - package: "@kieksme/mcp-swetrix-statistics"
+          - package: "@kieksme/swetrix-statistics-mcp"
             dir: packages/swetrix-statistics-mcp-server
 
     name: "${{ matrix.package }}"

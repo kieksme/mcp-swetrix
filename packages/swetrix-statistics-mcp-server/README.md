@@ -1,4 +1,4 @@
-# @kieksme/mcp-swetrix-statistics
+# @kieksme/swetrix-statistics-mcp
 
 MCP server for the [Swetrix Statistics API](https://swetrix.com/docs/statistics-api) — 34 read-only tools for querying traffic, performance, errors, funnels, goals, and more.
 
@@ -13,7 +13,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "swetrix-statistics": {
       "command": "npx",
-      "args": ["-y", "@kieksme/mcp-swetrix-statistics"],
+      "args": ["-y", "@kieksme/swetrix-statistics-mcp"],
       "env": {
         "SWETRIX_API_KEY": "your-api-key"
       }
@@ -25,7 +25,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ### Claude Code
 
 ```bash
-claude mcp add swetrix-statistics -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/mcp-swetrix-statistics
+claude mcp add swetrix-statistics -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/swetrix-statistics-mcp
 ```
 
 ### Environment variables

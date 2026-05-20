@@ -8,9 +8,9 @@ Monorepo with three MCP (Model Context Protocol) servers for the Swetrix analyti
 
 | Package | Path | npm |
 |---|---|---|
-| `@kieksme/mcp-swetrix-statistics` | `packages/swetrix-statistics-mcp-server` | read-only analytics queries |
-| `@kieksme/mcp-swetrix-events` | `packages/swetrix-events-mcp-server` | event ingestion |
-| `@kieksme/mcp-swetrix-admin` | `packages/swetrix-admin-mcp-server` | project management |
+| `@kieksme/swetrix-statistics-mcp` | `packages/swetrix-statistics-mcp-server` | read-only analytics queries |
+| `@kieksme/swetrix-events-mcp` | `packages/swetrix-events-mcp-server` | event ingestion |
+| `@kieksme/swetrix-admin-mcp` | `packages/swetrix-admin-mcp-server` | project management |
 
 Package manager: **pnpm 10**. Node: **>=20**. Language: **TypeScript (ESM)**.
 
@@ -70,8 +70,8 @@ pnpm test
 pnpm typecheck
 
 # Work on a single package
-pnpm --filter @kieksme/mcp-swetrix-statistics test
-pnpm --filter @kieksme/mcp-swetrix-statistics build
+pnpm --filter @kieksme/swetrix-statistics-mcp test
+pnpm --filter @kieksme/swetrix-statistics-mcp build
 ```
 
 ## Adding a new tool to a package
