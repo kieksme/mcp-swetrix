@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.1.2...mcp-swetrix-events1.1.3) (2026-05-20)
+
+
+### Bug Fixes
+
+* **events:** align MCP server name with package name ([43d9391](https://github.com/kieksme/mcp-swetrix/commit/43d9391c94760f930617092bdc3bbd7ec1ad6977))
+
 ## [1.1.2](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.1.1...mcp-swetrix-events1.1.2) (2026-05-20)
 
 
