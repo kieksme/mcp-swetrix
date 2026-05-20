@@ -1,12 +1,18 @@
-name: Publish
+name: Publish (manual)
 
-# Triggered automatically when release-please publishes a GitHub Release,
-# or manually for emergency re-publishes.
+# Emergency / re-publish workflow.
+# Automatic publishing on release is handled by release-please.yml.
 #
-# Runner selection (three levels, first match wins):
-#   1. workflow_dispatch input  `runner`        – per-run override
-#   2. repository variable      PUBLISH_RUNNER  – set in Settings → Variables
-#   3. fallback                 ubuntu-latest
+# Why no release: types: [published] trigger here?
+# Releases created by release-please use GITHUB_TOKEN, which does not
+# fire cross-workflow events by design (GitHub prevents accidental loops).
+# The publish job therefore lives in release-please.yml where it has
+# direct access to the release-please outputs.
+#
+# Runner selection (first match wins):
+#   1. workflow_dispatch input `runner`       – per-run override
+#   2. repository variable     PUBLISH_RUNNER – set in Settings → Variables
+#   3. fallback                ubuntu-latest
 #
 # Self-hosted requirements:
 #   - Network access to registry.npmjs.org and npm.pkg.github.com
@@ -18,8 +24,6 @@ name: Publish
 # the @kieksme org. A Granular token cannot publish packages created after the
 # token was issued.
 on:
-  release:
-    types: [published]
   workflow_dispatch:
     inputs:
       package:

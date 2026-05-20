@@ -2,14 +2,16 @@ name: Release Please
 
 # Runs on every push to main.
 # Release Please opens/updates a release PR per changed package.
-# When that PR is merged, it creates a GitHub Release and tag –
-# which automatically triggers publish.yml for the affected package.
+# When that PR is merged, it creates GitHub Releases and tags, then
+# the publish job below builds and publishes the affected packages.
+#
+# Note: publish.yml handles only manual emergency re-publishes.
+# A separate release: types: [published] trigger cannot be used here
+# because releases created via GITHUB_TOKEN do not fire cross-workflow events.
 #
 # Runner selection:
 #   repository variable RELEASE_PLEASE_RUNNER  – set in Settings → Variables
 #   fallback:           ubuntu-latest
-#   Note: this job only calls the GitHub API; a self-hosted runner is rarely needed
-#   unless the environment enforces outbound traffic through a corporate proxy.
 on:
   push:
     branches: [main]
@@ -17,13 +19,82 @@ on:
 permissions:
   contents: write       # create releases & tags
   pull-requests: write  # open & update release PRs
+  id-token: write       # OIDC for npm provenance
+  packages: write       # publish to GitHub Packages
 
 jobs:
+  # ── Step 1: Run Release Please ────────────────────────────────────────────
   release-please:
     runs-on: ${{ vars.RELEASE_PLEASE_RUNNER || 'ubuntu-latest' }}
+    outputs:
+      events_released:     ${{ steps.rp.outputs['packages/swetrix-events-mcp-server--release_created'] }}
+      admin_released:      ${{ steps.rp.outputs['packages/swetrix-admin-mcp-server--release_created'] }}
+      statistics_released: ${{ steps.rp.outputs['packages/swetrix-statistics-mcp-server--release_created'] }}
     steps:
       - uses: googleapis/release-please-action@v4
+        id: rp
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+  # ── Step 2: Publish all released packages ─────────────────────────────────
+  publish:
+    needs: release-please
+    if: |
+      needs.release-please.outputs.events_released == 'true' ||
+      needs.release-please.outputs.admin_released == 'true' ||
+      needs.release-please.outputs.statistics_released == 'true'
+    runs-on: ${{ vars.PUBLISH_RUNNER || 'ubuntu-latest' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Publish to npm
+        env:
+          EVENTS_RELEASED:     ${{ needs.release-please.outputs.events_released }}
+          ADMIN_RELEASED:      ${{ needs.release-please.outputs.admin_released }}
+          STATISTICS_RELEASED: ${{ needs.release-please.outputs.statistics_released }}
+          NODE_AUTH_TOKEN:     ${{ secrets.NPM_TOKEN }}
+        run: |
+          publish() {
+            local name="$1" dir="$2"
+            echo "▶ Publishing $name to npm…"
+            pnpm --filter "$name" install
+            pnpm --filter "$name" test
+            npm publish "$dir" --provenance --access public
+          }
+          [[ "$EVENTS_RELEASED"     == "true" ]] && publish "@kieksme/swetrix-events-mcp"     packages/swetrix-events-mcp-server
+          [[ "$ADMIN_RELEASED"      == "true" ]] && publish "@kieksme/swetrix-admin-mcp"      packages/swetrix-admin-mcp-server
+          [[ "$STATISTICS_RELEASED" == "true" ]] && publish "@kieksme/swetrix-statistics-mcp" packages/swetrix-statistics-mcp-server
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Publish to GitHub Packages
+        env:
+          EVENTS_RELEASED:     ${{ needs.release-please.outputs.events_released }}
+          ADMIN_RELEASED:      ${{ needs.release-please.outputs.admin_released }}
+          STATISTICS_RELEASED: ${{ needs.release-please.outputs.statistics_released }}
+          NODE_AUTH_TOKEN:     ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          publish() {
+            local name="$1" dir="$2"
+            echo "▶ Publishing $name to GitHub Packages…"
+            # --no-provenance: GitHub Packages does not support npm provenance
+            npm publish "$dir" --no-provenance --access public
+          }
+          [[ "$EVENTS_RELEASED"     == "true" ]] && publish "@kieksme/swetrix-events-mcp"     packages/swetrix-events-mcp-server
+          [[ "$ADMIN_RELEASED"      == "true" ]] && publish "@kieksme/swetrix-admin-mcp"      packages/swetrix-admin-mcp-server
+          [[ "$STATISTICS_RELEASED" == "true" ]] && publish "@kieksme/swetrix-statistics-mcp" packages/swetrix-statistics-mcp-server
