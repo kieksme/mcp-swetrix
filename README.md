@@ -66,20 +66,9 @@ All packages support an optional `SWETRIX_API_BASE_URL` environment variable.
 
 When omitted, the servers continue using the public Swetrix Cloud API.
 
-## Development
-
-```bash
-pnpm install
-pnpm build
-pnpm test
-pnpm typecheck
-```
-
-Requires Node ≥ 20 and pnpm 10.
-
 ## Contributing
 
-This project uses **trunk-based development** with [Release Please](https://github.com/googleapis/release-please) for automated versioning. See [AGENTS.md](AGENTS.md) for contribution guidelines and commit conventions.
+For development setup and contribution workflow, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
