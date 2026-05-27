@@ -1,5 +1,5 @@
 {
-  "packages/swetrix-events-mcp-server": "1.1.4",
-  "packages/swetrix-admin-mcp-server": "1.1.3",
-  "packages/swetrix-statistics-mcp-server": "1.1.3"
+  "packages/swetrix-events-mcp-server": "1.2.0",
+  "packages/swetrix-admin-mcp-server": "1.2.0",
+  "packages/swetrix-statistics-mcp-server": "1.2.0"
 }

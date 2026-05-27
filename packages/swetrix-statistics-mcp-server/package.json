@@ -1,6 +1,6 @@
 {
   "name": "@kieksme/swetrix-statistics-mcp",
-  "version": "1.1.3",
+  "version": "1.2.0",
   "description": "MCP server for the Swetrix Statistics API – read-only analytics queries",
   "type": "module",
   "main": "dist/index.js",
