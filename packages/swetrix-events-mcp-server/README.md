@@ -13,7 +13,10 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
   "mcpServers": {
     "swetrix-events": {
       "command": "npx",
-      "args": ["-y", "@kieksme/swetrix-events-mcp"]
+      "args": ["-y", "@kieksme/swetrix-events-mcp"],
+      "env": {
+        "SWETRIX_API_BASE_URL": "https://analytics.example.com"
+      }
     }
   }
 }
@@ -28,7 +31,8 @@ For revenue tracking, add your API key:
       "command": "npx",
       "args": ["-y", "@kieksme/swetrix-events-mcp"],
       "env": {
-        "SWETRIX_API_KEY": "your-api-key"
+        "SWETRIX_API_KEY": "your-api-key",
+        "SWETRIX_API_BASE_URL": "https://analytics.example.com"
       }
     }
   }
@@ -39,10 +43,10 @@ For revenue tracking, add your API key:
 
 ```bash
 # Without revenue tracking
-claude mcp add swetrix-events -- npx -y @kieksme/swetrix-events-mcp
+claude mcp add swetrix-events -e SWETRIX_API_BASE_URL=https://analytics.example.com -- npx -y @kieksme/swetrix-events-mcp
 
 # With revenue tracking
-claude mcp add swetrix-events -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/swetrix-events-mcp
+claude mcp add swetrix-events -e SWETRIX_API_KEY=your-key -e SWETRIX_API_BASE_URL=https://analytics.example.com -- npx -y @kieksme/swetrix-events-mcp
 ```
 
 ### Environment variables
@@ -50,6 +54,7 @@ claude mcp add swetrix-events -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/swe
 | Variable | Required | Description |
 |---|---|---|
 | `SWETRIX_API_KEY` | Only for `swetrix_track_revenue` | Your Swetrix API key |
+| `SWETRIX_API_BASE_URL` | No | Custom API base URL for self-hosted Swetrix (default: `https://api.swetrix.com`) |
 
 Most tools only need the project ID (`pid`), not an API key.
 

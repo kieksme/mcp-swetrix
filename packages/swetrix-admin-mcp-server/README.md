@@ -17,7 +17,8 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
       "command": "npx",
       "args": ["-y", "@kieksme/swetrix-admin-mcp"],
       "env": {
-        "SWETRIX_API_KEY": "your-api-key"
+        "SWETRIX_API_KEY": "your-api-key",
+        "SWETRIX_API_BASE_URL": "https://analytics.example.com"
       }
     }
   }
@@ -27,7 +28,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 ### Claude Code
 
 ```bash
-claude mcp add swetrix-admin -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/swetrix-admin-mcp
+claude mcp add swetrix-admin -e SWETRIX_API_KEY=your-key -e SWETRIX_API_BASE_URL=https://analytics.example.com -- npx -y @kieksme/swetrix-admin-mcp
 ```
 
 ### Environment variables
@@ -35,6 +36,7 @@ claude mcp add swetrix-admin -e SWETRIX_API_KEY=your-key -- npx -y @kieksme/swet
 | Variable | Required | Description |
 |---|---|---|
 | `SWETRIX_API_KEY` | Yes | Your Swetrix API key (Account Settings → API keys) |
+| `SWETRIX_API_BASE_URL` | No | Custom API base URL for self-hosted Swetrix (default: `https://api.swetrix.com`) |
 
 ## Tools
 
