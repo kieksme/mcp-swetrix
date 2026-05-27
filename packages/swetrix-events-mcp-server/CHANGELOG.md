@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.2.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.1.4...mcp-swetrix-events1.2.0) (2026-05-27)
+
+
+### Features
+
+* add swetrix-events-mcp-server with monorepo foundation ([14d30b3](https://github.com/kieksme/mcp-swetrix/commit/14d30b3d0c2efa1854d963df0384f24838be49a9))
+* three Swetrix MCP servers with Release Please and npm publishing ([ea35989](https://github.com/kieksme/mcp-swetrix/commit/ea35989ebdbd04f2129fa43327d006673c62385f))
+
+
+### Bug Fixes
+
+* **ci:** verify end-to-end release and publish pipeline ([47b6cb1](https://github.com/kieksme/mcp-swetrix/commit/47b6cb1a00ccef007cffa5486a2c5a42b4889f9e))
+* correct license to GPL-3.0-only in all package.json and README files ([6b89ba1](https://github.com/kieksme/mcp-swetrix/commit/6b89ba1d33f1dc5960958380caf970d20ee88356))
+* **events:** align MCP server name with package name ([43d9391](https://github.com/kieksme/mcp-swetrix/commit/43d9391c94760f930617092bdc3bbd7ec1ad6977))
+* normalize repository URL to git+https in all package.json files ([0700b9f](https://github.com/kieksme/mcp-swetrix/commit/0700b9f00fb175c092404943e0acf2e7dda18a6c))
+
 ## [1.1.4](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.1.3...mcp-swetrix-events1.1.4) (2026-05-20)
 
 
