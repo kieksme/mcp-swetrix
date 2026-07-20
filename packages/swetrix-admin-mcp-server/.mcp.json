@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "swetrix-admin": {
+      "command": "npx",
+      "args": ["-y", "@kieksme/swetrix-admin-mcp"],
+      "env": {
+        "SWETRIX_API_KEY": "${SWETRIX_API_KEY}",
+        "SWETRIX_API_BASE_URL": "${SWETRIX_API_BASE_URL}"
+      }
+    }
+  }
+}
