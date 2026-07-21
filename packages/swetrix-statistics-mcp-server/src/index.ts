@@ -21,27 +21,31 @@ if (!apiKey) {
 
 const client = createApiClient(apiKey);
 
-const server = new McpServer({
-  name: "swetrix-statistics-mcp-server",
-  version: "1.0.0",
-});
+function buildServer(): McpServer {
+  const server = new McpServer({
+    name: "swetrix-statistics-mcp-server",
+    version: "1.0.0",
+  });
 
-registerTrafficTools(server, client);
-registerPerformanceTools(server, client);
-registerFunnelTools(server, client);
-registerEventTools(server, client);
-registerErrorTools(server, client);
-registerProfileTools(server, client);
-registerFilterTools(server, client);
-registerGoalTools(server, client);
+  registerTrafficTools(server, client);
+  registerPerformanceTools(server, client);
+  registerFunnelTools(server, client);
+  registerEventTools(server, client);
+  registerErrorTools(server, client);
+  registerProfileTools(server, client);
+  registerFilterTools(server, client);
+  registerGoalTools(server, client);
+
+  return server;
+}
 
 async function main(): Promise<void> {
   if (MCP_TRANSPORT === "http") {
-    await startHttpTransport(server, { port: HTTP_PORT, endpoint: HTTP_ENDPOINT, authToken: HTTP_AUTH_TOKEN });
+    await startHttpTransport(buildServer, { port: HTTP_PORT, endpoint: HTTP_ENDPOINT, authToken: HTTP_AUTH_TOKEN });
     console.error(`swetrix-statistics-mcp-server running via HTTP on port ${HTTP_PORT} (${HTTP_ENDPOINT})`);
   } else {
     const transport = new StdioServerTransport();
-    await server.connect(transport);
+    await buildServer().connect(transport);
     console.error("swetrix-statistics-mcp-server running via stdio");
   }
 }

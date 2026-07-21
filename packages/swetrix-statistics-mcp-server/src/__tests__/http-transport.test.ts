@@ -10,8 +10,8 @@ let baseUrl: string;
 let httpServer: Awaited<ReturnType<typeof startHttpTransport>>;
 
 beforeAll(async () => {
-  const server = new McpServer({ name: "test", version: "0.0.0" });
-  httpServer = await startHttpTransport(server, { port: 0, endpoint: ENDPOINT, authToken: AUTH_TOKEN });
+  const buildServer = () => new McpServer({ name: "test", version: "0.0.0" });
+  httpServer = await startHttpTransport(buildServer, { port: 0, endpoint: ENDPOINT, authToken: AUTH_TOKEN });
   const { port } = httpServer.address() as AddressInfo;
   baseUrl = `http://127.0.0.1:${port}`;
 });
@@ -73,5 +73,40 @@ describe("with a valid bearer token", () => {
     expect(res.status).toBe(200);
     const body = (await res.json()) as { result?: { serverInfo?: { name: string } } };
     expect(body.result?.serverInfo?.name).toBe("test");
+  });
+
+  function initializeRequest() {
+    return authedFetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json, text/event-stream" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "initialize",
+        params: {
+          protocolVersion: "2025-06-18",
+          capabilities: {},
+          clientInfo: { name: "test-client", version: "0.0.0" },
+        },
+      }),
+    });
+  }
+
+  // Regression test: a single shared McpServer can't call connect() twice —
+  // the SDK throws "Already connected to a transport" once a second request
+  // arrives, so the transport must build a fresh McpServer per request.
+  it("handles two sequential initialize requests on the same running server", async () => {
+    const first = await initializeRequest();
+    expect(first.status).toBe(200);
+
+    const second = await initializeRequest();
+    expect(second.status).toBe(200);
+  });
+
+  it("handles concurrent initialize requests on the same running server", async () => {
+    const responses = await Promise.all([initializeRequest(), initializeRequest(), initializeRequest()]);
+    for (const res of responses) {
+      expect(res.status).toBe(200);
+    }
   });
 });
