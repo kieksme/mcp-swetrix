@@ -66,6 +66,106 @@ All packages support an optional `SWETRIX_API_BASE_URL` environment variable.
 
 When omitted, the servers continue using the public Swetrix Cloud API.
 
+## Remote MCP via Docker
+
+Each package can also run as a standalone **remote MCP server** instead of a local `stdio` process spawned by `npx`. In this mode the server speaks the MCP [Streamable HTTP](https://modelcontextprotocol.io/docs/concepts/transports#streamable-http) transport over a plain HTTP endpoint (`/mcp` by default) — this is exactly what the `Dockerfile` shipped with each package builds and runs. Use it when you want to:
+
+- host one server centrally so multiple clients/teammates can connect to it,
+- run the MCP server in your own infrastructure (Kubernetes, ECS, Cloud Run, a VM, …) instead of on every developer machine,
+- keep `SWETRIX_API_KEY` on the server side instead of distributing it to every client.
+
+### Build and run a single package
+
+```bash
+# Build context is the repository root (this is a pnpm workspace)
+docker build -f packages/swetrix-statistics-mcp-server/Dockerfile -t swetrix-statistics-mcp:http .
+
+docker run -d --name swetrix-statistics-mcp \
+  -p 3000:3000 \
+  -e SWETRIX_API_KEY=your-key \
+  -e SWETRIX_API_BASE_URL=https://analytics.example.com \
+  -e MCP_HTTP_AUTH_TOKEN="$(openssl rand -hex 32)" \
+  swetrix-statistics-mcp:http
+```
+
+The same pattern applies to `swetrix-events-mcp-server` and `swetrix-admin-mcp-server` — swap the `-f`/`-t` paths. See each package's README for package-specific env vars: [statistics](packages/swetrix-statistics-mcp-server/README.md#docker), [events](packages/swetrix-events-mcp-server/README.md#docker), [admin](packages/swetrix-admin-mcp-server/README.md#docker).
+
+### Pre-built images
+
+Images are published to the GitHub Container Registry on every release, tagged with the released package version and `latest`:
+
+```bash
+docker pull ghcr.io/kieksme/swetrix-statistics-mcp:latest
+docker pull ghcr.io/kieksme/swetrix-events-mcp:latest
+docker pull ghcr.io/kieksme/swetrix-admin-mcp:latest
+```
+
+### Running all three together with Docker Compose
+
+```yaml
+services:
+  swetrix-statistics:
+    image: ghcr.io/kieksme/swetrix-statistics-mcp:latest
+    ports: ["3001:3000"]
+    environment:
+      SWETRIX_API_KEY: ${SWETRIX_API_KEY}
+      SWETRIX_API_BASE_URL: ${SWETRIX_API_BASE_URL}
+      MCP_HTTP_AUTH_TOKEN: ${MCP_HTTP_AUTH_TOKEN}
+    restart: unless-stopped
+
+  swetrix-events:
+    image: ghcr.io/kieksme/swetrix-events-mcp:latest
+    ports: ["3002:3000"]
+    environment:
+      MCP_HTTP_AUTH_TOKEN: ${MCP_HTTP_AUTH_TOKEN}
+    restart: unless-stopped
+
+  swetrix-admin:
+    image: ghcr.io/kieksme/swetrix-admin-mcp:latest
+    ports: ["3003:3000"]
+    environment:
+      SWETRIX_API_KEY: ${SWETRIX_API_KEY}
+      SWETRIX_API_BASE_URL: ${SWETRIX_API_BASE_URL}
+      MCP_HTTP_AUTH_TOKEN: ${MCP_HTTP_AUTH_TOKEN}
+    restart: unless-stopped
+```
+
+Provide `SWETRIX_API_KEY`, `SWETRIX_API_BASE_URL` and `MCP_HTTP_AUTH_TOKEN` via a local, git-ignored `.env` file or your secrets manager — never commit real values.
+
+### Connecting a client to the remote server
+
+Once the container is reachable at a URL (behind your own TLS-terminating reverse proxy — see security notes below), point a client at it instead of using `command`/`args`:
+
+**Claude Code CLI:**
+
+```bash
+claude mcp add --transport http swetrix-statistics https://mcp.example.com/mcp \
+  --header "Authorization: Bearer <MCP_HTTP_AUTH_TOKEN>"
+```
+
+**Claude Desktop / `.mcp.json`:**
+
+```json
+{
+  "mcpServers": {
+    "swetrix-statistics": {
+      "type": "http",
+      "url": "https://mcp.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer <MCP_HTTP_AUTH_TOKEN>"
+      }
+    }
+  }
+}
+```
+
+### Security notes
+
+- The container listens on plain HTTP — always terminate TLS in front of it (reverse proxy, load balancer, or ingress) before exposing it beyond `localhost`.
+- `MCP_HTTP_AUTH_TOKEN` is the only thing standing between the internet and your Swetrix data/API key. Generate it with `openssl rand -hex 32` (or your secrets manager's generator), and rotate it if it is ever leaked.
+- Keep `SWETRIX_API_KEY` and `MCP_HTTP_AUTH_TOKEN` out of image layers and shell history — inject them at runtime via `--env-file`, orchestrator secrets, or a secrets manager (e.g. AWS Secrets Manager, GCP Secret Manager, Kubernetes `Secret`).
+- Apply least privilege: scope the Swetrix API key to only what each server needs, especially for `swetrix-admin-mcp`, which performs write operations.
+
 ## Contributing
 
 For development setup and contribution workflow, see [CONTRIBUTING.md](CONTRIBUTING.md).
