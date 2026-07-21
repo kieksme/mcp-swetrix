@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-statistics1.3.0...mcp-swetrix-statistics1.3.1) (2026-07-21)
+
+
+### Bug Fixes
+
+* build a fresh McpServer per HTTP request instead of reusing one ([1c60230](https://github.com/kieksme/mcp-swetrix/commit/1c60230db3d22bdeaf08a84cfcb112a64c22f7d4))
+* build a fresh McpServer per HTTP request instead of reusing one ([0017a1b](https://github.com/kieksme/mcp-swetrix/commit/0017a1bf29e35d5fd38aa567957336e9416d3881))
+
 ## [1.3.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-statistics1.2.0...mcp-swetrix-statistics1.3.0) (2026-07-21)
 
 
