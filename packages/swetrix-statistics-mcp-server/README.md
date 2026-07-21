@@ -75,6 +75,13 @@ docker run --rm -p 3000:3000 \
 
 Note: the build context is the repository root (this is a pnpm workspace).
 
+Pre-built images are also published to the GitHub Container Registry on every
+release, tagged with the released package version and `latest`:
+
+```bash
+docker pull ghcr.io/kieksme/swetrix-statistics-mcp:latest
+```
+
 ## Tools
 
 ### Traffic
