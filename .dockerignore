@@ -1,0 +1,16 @@
+node_modules
+**/node_modules
+.pnpm-store
+**/dist
+*.js.map
+*.d.ts.map
+coverage
+**/coverage
+.git
+.github
+.claude
+.clair
+.vscode
+.idea
+.DS_Store
+.env
