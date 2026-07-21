@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-admin1.2.0...mcp-swetrix-admin1.3.0) (2026-07-21)
+
+
+### Features
+
+* add Claude Code plugin marketplace for Swetrix MCP servers ([22dfd51](https://github.com/kieksme/mcp-swetrix/commit/22dfd518cfcfed0f50b298c8798c1b4c67acad45))
+* add Claude Code plugin marketplace for Swetrix MCP servers ([daa932a](https://github.com/kieksme/mcp-swetrix/commit/daa932adfa353721842c873fdb362a7b8c7345a8))
+* **mcp-swetrix-admin:** add Streamable HTTP transport and Docker image ([dfef5a5](https://github.com/kieksme/mcp-swetrix/commit/dfef5a5378224f93c51c3fbc9aae9c22d51d279f))
+
 ## [1.2.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-admin1.1.3...mcp-swetrix-admin1.2.0) (2026-05-27)
 
 

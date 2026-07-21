@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-statistics1.2.0...mcp-swetrix-statistics1.3.0) (2026-07-21)
+
+
+### Features
+
+* add Claude Code plugin marketplace for Swetrix MCP servers ([22dfd51](https://github.com/kieksme/mcp-swetrix/commit/22dfd518cfcfed0f50b298c8798c1b4c67acad45))
+* add Claude Code plugin marketplace for Swetrix MCP servers ([daa932a](https://github.com/kieksme/mcp-swetrix/commit/daa932adfa353721842c873fdb362a7b8c7345a8))
+* **mcp-swetrix-statistics:** add Streamable HTTP transport and Docker image ([4a60f25](https://github.com/kieksme/mcp-swetrix/commit/4a60f25c9abdd1c47b1ef0c6e46ff6a2c17fdd8e))
+
 ## [1.2.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-statistics1.1.3...mcp-swetrix-statistics1.2.0) (2026-05-27)
 
 
