@@ -58,6 +58,51 @@ claude mcp add swetrix-events -e SWETRIX_API_KEY=your-key -e SWETRIX_API_BASE_UR
 
 Most tools only need the project ID (`pid`), not an API key.
 
+## HTTP transport
+
+By default the server communicates over stdio, as used above. It can instead
+be run as a standalone HTTP server speaking the MCP [Streamable HTTP](https://modelcontextprotocol.io/docs/concepts/transports#streamable-http)
+transport — useful for remote/containerized deployments.
+
+| Variable | Required | Description |
+|---|---|---|
+| `MCP_TRANSPORT` | No | Set to `http` to enable the HTTP transport (default: `stdio`) |
+| `PORT` | No | Port to listen on in HTTP mode (default: `3000`) |
+| `MCP_HTTP_ENDPOINT` | No | Path the server listens on in HTTP mode (default: `/mcp`) |
+| `MCP_HTTP_AUTH_TOKEN` | Yes, in HTTP mode | Bearer token clients must send; the server refuses to start without it |
+
+```bash
+MCP_TRANSPORT=http PORT=3000 MCP_HTTP_AUTH_TOKEN=change-me node dist/index.js
+```
+
+Every request must include `Authorization: Bearer <MCP_HTTP_AUTH_TOKEN>`; requests without a valid token receive `401 Unauthorized`.
+
+```bash
+curl -X POST http://localhost:3000/mcp \
+  -H "Authorization: Bearer change-me" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"curl","version":"0.0.0"}}}'
+```
+
+### Docker
+
+```bash
+docker build -f packages/swetrix-events-mcp-server/Dockerfile -t swetrix-events-mcp:http .
+docker run --rm -p 3000:3000 \
+  -e MCP_HTTP_AUTH_TOKEN=change-me \
+  swetrix-events-mcp:http
+```
+
+Note: the build context is the repository root (this is a pnpm workspace).
+
+Pre-built images are also published to the GitHub Container Registry on every
+release, tagged with the released package version and `latest`:
+
+```bash
+docker pull ghcr.io/kieksme/swetrix-events-mcp:latest
+```
+
 ## Tools
 
 | Tool | Auth required | Description |
