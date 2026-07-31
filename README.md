@@ -94,9 +94,9 @@ The same pattern applies to `swetrix-events-mcp-server` and `swetrix-admin-mcp-s
 
 | Package | Deploy |
 |---|---|
-| Statistics | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/imqlm6?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
-| Events | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/-iWk9J?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
-| Admin | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/Eu1l6d?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
+| Statistics | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/swetrix-statistics-mcp?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
+| Events | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/swetrix-events-mcp?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
+| Admin | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/swetrix-admin-mcp?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
 
 Each button provisions a Railway service from this repo's Dockerfile in HTTP mode. You'll be prompted for `SWETRIX_API_KEY` where required; `MCP_HTTP_AUTH_TOKEN` is generated automatically. Set `SWETRIX_API_BASE_URL` on the service afterwards if you're using a self-hosted Swetrix instance.
 
