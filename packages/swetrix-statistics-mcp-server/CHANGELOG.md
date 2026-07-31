@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-statistics1.3.1...mcp-swetrix-statistics1.4.0) (2026-07-31)
+
+
+### Features
+
+* add Railway deploy configs and one-click deploy buttons ([3eddbe6](https://github.com/kieksme/mcp-swetrix/commit/3eddbe62665e4d3aa4ab3b9d6283bf5e69d6ff08))
+
 ## [1.3.1](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-statistics1.3.0...mcp-swetrix-statistics1.3.1) (2026-07-21)
 
 
