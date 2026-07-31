@@ -52,12 +52,16 @@ async function readJsonBody(req: IncomingMessage): Promise<unknown> {
 }
 
 /**
- * Starts a stateless Streamable HTTP transport (one StreamableHTTPServerTransport
- * per request, per the MCP SDK's documented stateless usage) bound to `server`,
- * which must already have all tools registered. Returns the underlying
- * http.Server so callers (and tests) can inspect its bound address or close it.
+ * Starts a stateless Streamable HTTP transport: a fresh McpServer + a fresh
+ * StreamableHTTPServerTransport per request, per the MCP SDK's documented
+ * stateless usage. A single shared McpServer can't be reused across requests
+ * — Server.connect() throws "Already connected to a transport" once a second
+ * request arrives while (or before) the first request's transport has fully
+ * closed, so `buildServer` is invoked fresh for every request instead.
+ * Returns the underlying http.Server so callers (and tests) can inspect its
+ * bound address or close it.
  */
-export async function startHttpTransport(server: McpServer, options: HttpTransportOptions): Promise<Server> {
+export async function startHttpTransport(buildServer: () => McpServer, options: HttpTransportOptions): Promise<Server> {
   const { port, endpoint, authToken } = options;
 
   if (!authToken) {
@@ -86,6 +90,7 @@ export async function startHttpTransport(server: McpServer, options: HttpTranspo
       res.on("close", () => {
         void transport.close();
       });
+      const server = buildServer();
       await server.connect(transport);
       await transport.handleRequest(req, res, parsedBody);
     } catch (error) {
