@@ -103,6 +103,12 @@ release, tagged with the released package version and `latest`:
 docker pull ghcr.io/kieksme/swetrix-events-mcp:latest
 ```
 
+### Railway
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/-iWk9J?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
+Deploys this package as a Streamable HTTP server. `MCP_HTTP_AUTH_TOKEN` is generated automatically; `SWETRIX_API_KEY` is optional and only needed for the revenue-tracking tool.
+
 ## Tools
 
 | Tool | Auth required | Description |

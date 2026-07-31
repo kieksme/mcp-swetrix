@@ -3,7 +3,6 @@
 MCP (Model Context Protocol) servers for the [Swetrix](https://swetrix.com) analytics platform. Lets AI assistants like Claude query analytics data, track events, and manage projects directly via the Swetrix API.
 
 [![CI](https://github.com/kieksme/mcp-swetrix/actions/workflows/ci.yml/badge.svg)](https://github.com/kieksme/mcp-swetrix/actions/workflows/ci.yml)
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/O4ovtG?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic)
 
 ## Packages
 
@@ -67,21 +66,6 @@ All packages support an optional `SWETRIX_API_BASE_URL` environment variable.
 
 When omitted, the servers continue using the public Swetrix Cloud API.
 
-## Deploy on Railway
-
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/O4ovtG?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic)
-
-Click the button to deploy the MCP servers as remote (Streamable HTTP) services on [Railway](https://railway.com), using the same `Dockerfile`s described below. After deploying, configure these environment variables on the Railway service(s):
-
-| Variable | Required | Default | Notes |
-|---|---|---|---|
-| `SWETRIX_API_KEY` | Yes for `statistics`/`admin`, optional for `events` | – | Set as a Railway **secret**, never as plain text. Get it at [swetrix.com](https://swetrix.com) → Account Settings → API keys |
-| `SWETRIX_API_BASE_URL` | No | `https://api.swetrix.com` | Set only if using a self-hosted Swetrix instance |
-| `MCP_HTTP_AUTH_TOKEN` | Recommended | none (no auth) | Set as a Railway **secret**, e.g. generated with `openssl rand -hex 32` — see [Security notes](#security-notes) |
-| `PORT` | No | `3000` | Railway injects its own value automatically; the server already reads `process.env.PORT` |
-
-Railway automatically checks the repository's default branch for new commits and shows a template update notification to anyone who deployed it. Since every release here is merged to `main` via `release-please`, deployed instances are notified of new releases automatically — applying the update still requires manual confirmation in the Railway dashboard.
-
 ## Remote MCP via Docker
 
 Each package can also run as a standalone **remote MCP server** instead of a local `stdio` process spawned by `npx`. In this mode the server speaks the MCP [Streamable HTTP](https://modelcontextprotocol.io/docs/concepts/transports#streamable-http) transport over a plain HTTP endpoint (`/mcp` by default) — this is exactly what the `Dockerfile` shipped with each package builds and runs. Use it when you want to:
@@ -105,6 +89,16 @@ docker run -d --name swetrix-statistics-mcp \
 ```
 
 The same pattern applies to `swetrix-events-mcp-server` and `swetrix-admin-mcp-server` — swap the `-f`/`-t` paths. See each package's README for package-specific env vars: [statistics](packages/swetrix-statistics-mcp-server/README.md#docker), [events](packages/swetrix-events-mcp-server/README.md#docker), [admin](packages/swetrix-admin-mcp-server/README.md#docker).
+
+### One-click deploy (Railway)
+
+| Package | Deploy |
+|---|---|
+| Statistics | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/imqlm6?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
+| Events | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/-iWk9J?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
+| Admin | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/Eu1l6d?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
+
+Each button provisions a Railway service from this repo's Dockerfile in HTTP mode. You'll be prompted for `SWETRIX_API_KEY` where required; `MCP_HTTP_AUTH_TOKEN` is generated automatically. Set `SWETRIX_API_BASE_URL` on the service afterwards if you're using a self-hosted Swetrix instance.
 
 ### Pre-built images
 
