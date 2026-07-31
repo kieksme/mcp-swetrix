@@ -84,6 +84,12 @@ release, tagged with the released package version and `latest`:
 docker pull ghcr.io/kieksme/swetrix-admin-mcp:latest
 ```
 
+### Railway
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/Eu1l6d?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
+Deploys this package as a Streamable HTTP server. You'll be asked for `SWETRIX_API_KEY`; `MCP_HTTP_AUTH_TOKEN` is generated automatically.
+
 ## Tools
 
 ### Projects

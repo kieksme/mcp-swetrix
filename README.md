@@ -90,6 +90,16 @@ docker run -d --name swetrix-statistics-mcp \
 
 The same pattern applies to `swetrix-events-mcp-server` and `swetrix-admin-mcp-server` — swap the `-f`/`-t` paths. See each package's README for package-specific env vars: [statistics](packages/swetrix-statistics-mcp-server/README.md#docker), [events](packages/swetrix-events-mcp-server/README.md#docker), [admin](packages/swetrix-admin-mcp-server/README.md#docker).
 
+### One-click deploy (Railway)
+
+| Package | Deploy |
+|---|---|
+| Statistics | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/imqlm6?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
+| Events | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/iWk9J?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
+| Admin | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/Eu1l6d?referralCode=2_sIT9&utm_medium=integration&utm_source=template&utm_campaign=generic) |
+
+Each button provisions a Railway service from this repo's Dockerfile in HTTP mode. You'll be prompted for `SWETRIX_API_KEY` where required; `MCP_HTTP_AUTH_TOKEN` is generated automatically.
+
 ### Pre-built images
 
 Images are published to the GitHub Container Registry on every release, tagged with the released package version and `latest`:
