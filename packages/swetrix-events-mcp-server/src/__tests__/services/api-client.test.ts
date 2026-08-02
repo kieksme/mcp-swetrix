@@ -10,6 +10,7 @@ function makeAxiosError(status: number): AxiosError {
 
 describe("formatApiError", () => {
   it("formats 400", () => expect(formatApiError(makeAxiosError(400))).toContain("400"));
+  it("formats 401", () => expect(formatApiError(makeAxiosError(401))).toContain("401"));
   it("formats 402", () => expect(formatApiError(makeAxiosError(402))).toContain("402"));
   it("formats 403", () => expect(formatApiError(makeAxiosError(403))).toContain("403"));
   it("formats 429", () => expect(formatApiError(makeAxiosError(429))).toContain("429"));

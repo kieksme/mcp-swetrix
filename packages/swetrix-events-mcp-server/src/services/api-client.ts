@@ -26,6 +26,8 @@ export function formatApiError(error: unknown): string {
       switch (error.response.status) {
         case 400:
           return "Error 400: Bad request – check pid, missing fields, or project is disabled.";
+        case 401:
+          return "Error 401: Unauthorized – verify your SWETRIX_API_KEY.";
         case 402:
           return "Error 402: Subscription expired or event quota exceeded.";
         case 403:
