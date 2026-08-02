@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, afterEach } from "vitest";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { mswServer } from "../mocks/server.js";
+import { errorHandlers } from "../mocks/handlers.js";
 import { makeClient, getTool } from "../helpers.js";
 import { registerOrganisationTools } from "../../tools/organisations.js";
 
@@ -19,12 +20,24 @@ describe("swetrix_list_organisations", () => {
     const result = await getTool(setup(), "swetrix_list_organisations").handler({});
     expect(result.content[0].text).toContain("Acme Corp");
   });
+
+  it("returns error on 401", async () => {
+    mswServer.use(errorHandlers.unauthorized("get", "/v1/organisation"));
+    const result = await getTool(setup(), "swetrix_list_organisations").handler({});
+    expect(result.content[0].text).toContain("401");
+  });
 });
 
 describe("swetrix_get_organisation", () => {
   it("returns org details", async () => {
     const result = await getTool(setup(), "swetrix_get_organisation").handler({ orgId: "org1" });
     expect(result.content[0].text).toContain("org1");
+  });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("get", "/v1/organisation/missing"));
+    const result = await getTool(setup(), "swetrix_get_organisation").handler({ orgId: "missing" });
+    expect(result.content[0].text).toContain("404");
   });
 });
 
@@ -34,6 +47,12 @@ describe("swetrix_create_organisation", () => {
     expect(result.content[0].text).toContain("Acme Corp");
     expect(result.content[0].text).toContain("org2");
   });
+
+  it("returns error on 401", async () => {
+    mswServer.use(errorHandlers.unauthorized("post", "/v1/organisation"));
+    const result = await getTool(setup(), "swetrix_create_organisation").handler({ name: "Acme Corp" });
+    expect(result.content[0].text).toContain("401");
+  });
 });
 
 describe("swetrix_update_organisation", () => {
@@ -41,12 +60,24 @@ describe("swetrix_update_organisation", () => {
     const result = await getTool(setup(), "swetrix_update_organisation").handler({ orgId: "org1", name: "Acme Corp v2" });
     expect(result.content[0].text).toContain("org1");
   });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("patch", "/v1/organisation/missing"));
+    const result = await getTool(setup(), "swetrix_update_organisation").handler({ orgId: "missing", name: "Acme Corp v2" });
+    expect(result.content[0].text).toContain("404");
+  });
 });
 
 describe("swetrix_delete_organisation", () => {
   it("returns success message", async () => {
     const result = await getTool(setup(), "swetrix_delete_organisation").handler({ orgId: "org1" });
     expect(result.content[0].text).toContain("deleted");
+  });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("delete", "/v1/organisation/missing"));
+    const result = await getTool(setup(), "swetrix_delete_organisation").handler({ orgId: "missing" });
+    expect(result.content[0].text).toContain("404");
   });
 });
 
@@ -58,6 +89,14 @@ describe("swetrix_invite_org_member", () => {
     expect(result.content[0].text).toContain("user@example.com");
     expect(result.content[0].text).toContain("admin");
   });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("post", "/v1/organisation/missing/invite"));
+    const result = await getTool(setup(), "swetrix_invite_org_member").handler({
+      orgId: "missing", email: "user@example.com", role: "admin",
+    });
+    expect(result.content[0].text).toContain("404");
+  });
 });
 
 describe("swetrix_update_org_member", () => {
@@ -65,11 +104,23 @@ describe("swetrix_update_org_member", () => {
     const result = await getTool(setup(), "swetrix_update_org_member").handler({ memberId: "mem1", role: "viewer" });
     expect(result.content[0].text).toContain("viewer");
   });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("patch", "/v1/organisation/member/missing"));
+    const result = await getTool(setup(), "swetrix_update_org_member").handler({ memberId: "missing", role: "viewer" });
+    expect(result.content[0].text).toContain("404");
+  });
 });
 
 describe("swetrix_remove_org_member", () => {
   it("returns success message", async () => {
     const result = await getTool(setup(), "swetrix_remove_org_member").handler({ memberId: "mem1" });
     expect(result.content[0].text).toContain("removed");
+  });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("delete", "/v1/organisation/member/missing"));
+    const result = await getTool(setup(), "swetrix_remove_org_member").handler({ memberId: "missing" });
+    expect(result.content[0].text).toContain("404");
   });
 });

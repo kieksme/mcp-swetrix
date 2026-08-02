@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll, afterAll, afterEach } from "vitest";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { mswServer } from "../mocks/server.js";
+import { errorHandlers } from "../mocks/handlers.js";
 import { makeClient, getTool } from "../helpers.js";
 import { registerAnnotationTools } from "../../tools/annotations.js";
 
@@ -19,6 +20,12 @@ describe("swetrix_list_annotations", () => {
     const result = await getTool(setup(), "swetrix_list_annotations").handler({ pid: "proj1" });
     expect(result.content[0].text).toContain("Launch");
   });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("get", "/v1/project/annotations/missing"));
+    const result = await getTool(setup(), "swetrix_list_annotations").handler({ pid: "missing" });
+    expect(result.content[0].text).toContain("404");
+  });
 });
 
 describe("swetrix_create_annotation", () => {
@@ -27,6 +34,14 @@ describe("swetrix_create_annotation", () => {
       pid: "proj1", date: "2024-06-01", text: "Launch",
     });
     expect(result.content[0].text).toContain("2024-06-01");
+  });
+
+  it("returns error on 401", async () => {
+    mswServer.use(errorHandlers.unauthorized("post", "/v1/project/annotation"));
+    const result = await getTool(setup(), "swetrix_create_annotation").handler({
+      pid: "proj1", date: "2024-06-01", text: "Launch",
+    });
+    expect(result.content[0].text).toContain("401");
   });
 });
 
@@ -37,11 +52,25 @@ describe("swetrix_update_annotation", () => {
     });
     expect(result.content[0].text).toContain("ann1");
   });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("patch", "/v1/project/annotation"));
+    const result = await getTool(setup(), "swetrix_update_annotation").handler({
+      id: "missing", pid: "proj1", text: "Launch v2",
+    });
+    expect(result.content[0].text).toContain("404");
+  });
 });
 
 describe("swetrix_delete_annotation", () => {
   it("returns success message", async () => {
     const result = await getTool(setup(), "swetrix_delete_annotation").handler({ id: "ann1", pid: "proj1" });
     expect(result.content[0].text).toContain("deleted");
+  });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("delete", "/v1/project/annotation/missing/proj1"));
+    const result = await getTool(setup(), "swetrix_delete_annotation").handler({ id: "missing", pid: "proj1" });
+    expect(result.content[0].text).toContain("404");
   });
 });
