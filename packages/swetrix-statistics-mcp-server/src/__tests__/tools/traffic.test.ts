@@ -34,12 +34,24 @@ describe("swetrix_get_traffic_chart", () => {
     const r = await getTool(setup(), "swetrix_get_traffic_chart").handler({ pid: "p1", timeBucket: "day", period: "7d" });
     expect(r.content[0].text).toContain("chart");
   });
+
+  it("returns error on 401", async () => {
+    mswServer.use(errorHandlers.unauthorized("/v1/log/chart"));
+    const r = await getTool(setup(), "swetrix_get_traffic_chart").handler({ pid: "p1", timeBucket: "day", period: "7d" });
+    expect(r.content[0].text).toContain("401");
+  });
 });
 
 describe("swetrix_get_sessions", () => {
   it("returns sessions list", async () => {
     const r = await getTool(setup(), "swetrix_get_sessions").handler({ pid: "p1", period: "7d" });
     expect(r.content[0].text).toContain("psid");
+  });
+
+  it("returns error on 401", async () => {
+    mswServer.use(errorHandlers.unauthorized("/v1/log/sessions"));
+    const r = await getTool(setup(), "swetrix_get_sessions").handler({ pid: "p1", period: "7d" });
+    expect(r.content[0].text).toContain("401");
   });
 });
 
@@ -48,6 +60,12 @@ describe("swetrix_get_session_detail", () => {
     const r = await getTool(setup(), "swetrix_get_session_detail").handler({ pid: "p1", psid: "s1" });
     expect(r.content[0].text).toContain("pages");
   });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("/v1/log/session"));
+    const r = await getTool(setup(), "swetrix_get_session_detail").handler({ pid: "p1", psid: "missing" });
+    expect(r.content[0].text).toContain("404");
+  });
 });
 
 describe("swetrix_get_live_visitors", () => {
@@ -55,11 +73,23 @@ describe("swetrix_get_live_visitors", () => {
     const r = await getTool(setup(), "swetrix_get_live_visitors").handler({ pid: "p1" });
     expect(r.content[0].text).toContain("desktop");
   });
+
+  it("returns error on 401", async () => {
+    mswServer.use(errorHandlers.unauthorized("/v1/log/live-visitors"));
+    const r = await getTool(setup(), "swetrix_get_live_visitors").handler({ pid: "p1" });
+    expect(r.content[0].text).toContain("401");
+  });
 });
 
 describe("swetrix_get_birdseye", () => {
   it("returns period comparison", async () => {
     const r = await getTool(setup(), "swetrix_get_birdseye").handler({ pid: "p1", period: "7d" });
     expect(r.content[0].text).toContain("current");
+  });
+
+  it("returns error on 401", async () => {
+    mswServer.use(errorHandlers.unauthorized("/v1/log/birdseye"));
+    const r = await getTool(setup(), "swetrix_get_birdseye").handler({ pid: "p1", period: "7d" });
+    expect(r.content[0].text).toContain("401");
   });
 });

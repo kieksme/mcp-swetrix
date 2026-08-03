@@ -20,6 +20,12 @@ describe("swetrix_list_projects", () => {
     const result = await getTool(setup(), "swetrix_list_projects").handler({});
     expect(result.content[0].text).toContain("My Project");
   });
+
+  it("returns error on 401", async () => {
+    mswServer.use(errorHandlers.unauthorized("get", "/v1/project"));
+    const result = await getTool(setup(), "swetrix_list_projects").handler({});
+    expect(result.content[0].text).toContain("401");
+  });
 });
 
 describe("swetrix_get_project", () => {
@@ -41,6 +47,12 @@ describe("swetrix_create_project", () => {
     expect(result.content[0].text).toContain("proj1");
     expect(result.content[0].text).toContain("My Project");
   });
+
+  it("returns error on 401", async () => {
+    mswServer.use(errorHandlers.unauthorized("post", "/v1/project"));
+    const result = await getTool(setup(), "swetrix_create_project").handler({ name: "My Project" });
+    expect(result.content[0].text).toContain("401");
+  });
 });
 
 describe("swetrix_update_project", () => {
@@ -48,12 +60,24 @@ describe("swetrix_update_project", () => {
     const result = await getTool(setup(), "swetrix_update_project").handler({ id: "proj1", name: "Updated" });
     expect(result.content[0].text).toContain("proj1");
   });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("put", "/v1/project/missing"));
+    const result = await getTool(setup(), "swetrix_update_project").handler({ id: "missing", name: "Updated" });
+    expect(result.content[0].text).toContain("404");
+  });
 });
 
 describe("swetrix_delete_project", () => {
   it("returns success message", async () => {
     const result = await getTool(setup(), "swetrix_delete_project").handler({ id: "proj1" });
     expect(result.content[0].text).toContain("deleted");
+  });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("delete", "/v1/project/missing"));
+    const result = await getTool(setup(), "swetrix_delete_project").handler({ id: "missing" });
+    expect(result.content[0].text).toContain("404");
   });
 });
 
@@ -63,9 +87,21 @@ describe("swetrix_pin_project / swetrix_unpin_project", () => {
     expect(result.content[0].text).toContain("pinned");
   });
 
+  it("pin returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("post", "/v1/project/missing/pin"));
+    const result = await getTool(setup(), "swetrix_pin_project").handler({ id: "missing" });
+    expect(result.content[0].text).toContain("404");
+  });
+
   it("unpin returns confirmation", async () => {
     const result = await getTool(setup(), "swetrix_unpin_project").handler({ id: "proj1" });
     expect(result.content[0].text).toContain("unpinned");
+  });
+
+  it("unpin returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("delete", "/v1/project/missing/pin"));
+    const result = await getTool(setup(), "swetrix_unpin_project").handler({ id: "missing" });
+    expect(result.content[0].text).toContain("404");
   });
 });
 
@@ -73,5 +109,11 @@ describe("swetrix_assign_project_org", () => {
   it("returns confirmation", async () => {
     const result = await getTool(setup(), "swetrix_assign_project_org").handler({ id: "proj1", organisationId: "org1" });
     expect(result.content[0].text).toContain("org1");
+  });
+
+  it("returns error on 404", async () => {
+    mswServer.use(errorHandlers.notFound("patch", "/v1/project/missing/organisation"));
+    const result = await getTool(setup(), "swetrix_assign_project_org").handler({ id: "missing", organisationId: "org1" });
+    expect(result.content[0].text).toContain("404");
   });
 });

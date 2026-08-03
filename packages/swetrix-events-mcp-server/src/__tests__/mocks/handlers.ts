@@ -22,4 +22,10 @@ export const errorHandlers = {
   revenueForbidden: http.post(`${SWETRIX_API_BASE}/log/revenue`, () =>
     HttpResponse.json({ message: "Forbidden" }, { status: 403 })
   ),
+  errorEventBadRequest: http.post(`${SWETRIX_API_BASE}/log/error`, () =>
+    HttpResponse.json({ message: "Bad Request" }, { status: 400 })
+  ),
+  heartbeatBadRequest: http.post(`${SWETRIX_API_BASE}/log/hb`, () =>
+    HttpResponse.json({ message: "Bad Request" }, { status: 400 })
+  ),
 };
