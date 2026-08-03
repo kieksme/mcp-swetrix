@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.4.0...mcp-swetrix-events1.4.1) (2026-08-03)
+
+
+### Bug Fixes
+
+* **mcp-swetrix-events:** handle 401 unauthorized response ([#24](https://github.com/kieksme/mcp-swetrix/issues/24)) ([b174edf](https://github.com/kieksme/mcp-swetrix/commit/b174edfde4659b5719f74e965b4ec07a9887e83b))
+
 ## [1.4.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.3.1...mcp-swetrix-events1.4.0) (2026-07-31)
 
 
