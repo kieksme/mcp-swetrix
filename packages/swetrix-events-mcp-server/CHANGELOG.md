@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.4.1](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.4.0...mcp-swetrix-events1.4.1) (2026-08-12)
+
+
+### Bug Fixes
+
+* include LICENSE file in each published package tarball ([#28](https://github.com/kieksme/mcp-swetrix/issues/28)) ([a7c03c0](https://github.com/kieksme/mcp-swetrix/commit/a7c03c0dabe15fc0a4004a860f90589d52b8ca42))
+* **mcp-swetrix-events:** handle 401 unauthorized response ([#24](https://github.com/kieksme/mcp-swetrix/issues/24)) ([b174edf](https://github.com/kieksme/mcp-swetrix/commit/b174edfde4659b5719f74e965b4ec07a9887e83b))
+
 ## [1.4.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-events1.3.1...mcp-swetrix-events1.4.0) (2026-07-31)
 
 
