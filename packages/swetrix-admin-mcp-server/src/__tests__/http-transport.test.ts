@@ -110,3 +110,59 @@ describe("with a valid bearer token", () => {
     }
   });
 });
+
+describe("error handling", () => {
+  function authedFetch(path: string, init?: RequestInit) {
+    return fetch(`${baseUrl}${path}`, {
+      ...init,
+      headers: { ...init?.headers, Authorization: `Bearer ${AUTH_TOKEN}` },
+    });
+  }
+
+  it("returns 400 for an invalid JSON body", async () => {
+    const res = await authedFetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{not valid json",
+    });
+
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error?: { message?: string } };
+    expect(body.error?.message).toBe("Invalid JSON body");
+  });
+
+  it("returns 400 when the request body exceeds the size limit", async () => {
+    const oversized = "a".repeat(10 * 1024 * 1024 + 1);
+    const res = await authedFetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: oversized,
+    });
+
+    expect(res.status).toBe(400);
+    const body = (await res.json()) as { error?: { message?: string } };
+    expect(body.error?.message).toBe("Request body too large");
+  });
+
+  it("returns 500 when the server fails to build", async () => {
+    const buildServer = (): McpServer => {
+      throw new Error("boom");
+    };
+    const failingServer = await startHttpTransport(buildServer, { port: 0, endpoint: ENDPOINT, authToken: AUTH_TOKEN });
+    const { port } = failingServer.address() as AddressInfo;
+
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}${ENDPOINT}`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${AUTH_TOKEN}`, "Content-Type": "application/json" },
+        body: "{}",
+      });
+
+      expect(res.status).toBe(500);
+      const body = (await res.json()) as { error?: { message?: string } };
+      expect(body.error?.message).toBe("Internal server error");
+    } finally {
+      await new Promise<void>((resolve) => failingServer.close(() => resolve()));
+    }
+  });
+});
