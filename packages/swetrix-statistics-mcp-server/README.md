@@ -2,6 +2,9 @@
 
 MCP server for the [Swetrix Statistics API](https://swetrix.com/docs/statistics-api) — 34 read-only tools for querying traffic, performance, errors, funnels, goals, and more.
 
+[![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=swetrix-statistics&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBraWVrc21lL3N3ZXRyaXgtc3RhdGlzdGljcy1tY3AiXSwiZW52Ijp7IlNXRVRSSVhfQVBJX0tFWSI6InlvdXItYXBpLWtleSIsIlNXRVRSSVhfQVBJX0JBU0VfVVJMIjoiaHR0cHM6Ly9hbmFseXRpY3MuZXhhbXBsZS5jb20ifX0%3D)
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](vscode:mcp/install?%7B%22name%22%3A%22swetrix-statistics%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40kieksme%2Fswetrix-statistics-mcp%22%5D%2C%22env%22%3A%7B%22SWETRIX_API_KEY%22%3A%22your-api-key%22%2C%22SWETRIX_API_BASE_URL%22%3A%22https%3A%2F%2Fanalytics.example.com%22%7D%7D)
+
 ## Installation
 
 ### Claude Desktop

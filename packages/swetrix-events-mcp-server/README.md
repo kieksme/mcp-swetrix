@@ -2,6 +2,9 @@
 
 MCP server for the [Swetrix Events API](https://swetrix.com/docs/events-api) — 5 tools for tracking pageviews, custom events, heartbeats, errors, and revenue from AI assistants.
 
+[![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=swetrix-events&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBraWVrc21lL3N3ZXRyaXgtZXZlbnRzLW1jcCJdLCJlbnYiOnsiU1dFVFJJWF9BUElfQkFTRV9VUkwiOiJodHRwczovL2FuYWx5dGljcy5leGFtcGxlLmNvbSJ9fQ%3D%3D)
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](vscode:mcp/install?%7B%22name%22%3A%22swetrix-events%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40kieksme%2Fswetrix-events-mcp%22%5D%2C%22env%22%3A%7B%22SWETRIX_API_BASE_URL%22%3A%22https%3A%2F%2Fanalytics.example.com%22%7D%7D)
+
 ## Installation
 
 ### Claude Desktop

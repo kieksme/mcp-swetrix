@@ -7,6 +7,16 @@ MCP (Model Context Protocol) servers for the [Swetrix](https://swetrix.com) anal
 [![CI](https://github.com/kieksme/mcp-swetrix/actions/workflows/ci.yml/badge.svg)](https://github.com/kieksme/mcp-swetrix/actions/workflows/ci.yml)
 [![SkillAudit](https://skillaudit.dev/badge/kieksme/mcp-swetrix.svg)](https://skillaudit.dev/report/kieksme/mcp-swetrix)
 
+## One-click install
+
+Each server can be installed directly into Cursor or VS Code. These buttons prefill the server's `command`/`args`/`env` — you'll still need to fill in your own `SWETRIX_API_KEY` and, if self-hosting, `SWETRIX_API_BASE_URL`.
+
+| Package | Cursor | VS Code |
+|---|---|---|
+| `@kieksme/swetrix-statistics-mcp` | [![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=swetrix-statistics&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBraWVrc21lL3N3ZXRyaXgtc3RhdGlzdGljcy1tY3AiXSwiZW52Ijp7IlNXRVRSSVhfQVBJX0tFWSI6InlvdXItYXBpLWtleSIsIlNXRVRSSVhfQVBJX0JBU0VfVVJMIjoiaHR0cHM6Ly9hbmFseXRpY3MuZXhhbXBsZS5jb20ifX0%3D) | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](vscode:mcp/install?%7B%22name%22%3A%22swetrix-statistics%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40kieksme%2Fswetrix-statistics-mcp%22%5D%2C%22env%22%3A%7B%22SWETRIX_API_KEY%22%3A%22your-api-key%22%2C%22SWETRIX_API_BASE_URL%22%3A%22https%3A%2F%2Fanalytics.example.com%22%7D%7D) |
+| `@kieksme/swetrix-events-mcp` | [![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=swetrix-events&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBraWVrc21lL3N3ZXRyaXgtZXZlbnRzLW1jcCJdLCJlbnYiOnsiU1dFVFJJWF9BUElfQkFTRV9VUkwiOiJodHRwczovL2FuYWx5dGljcy5leGFtcGxlLmNvbSJ9fQ%3D%3D) | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](vscode:mcp/install?%7B%22name%22%3A%22swetrix-events%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40kieksme%2Fswetrix-events-mcp%22%5D%2C%22env%22%3A%7B%22SWETRIX_API_BASE_URL%22%3A%22https%3A%2F%2Fanalytics.example.com%22%7D%7D) |
+| `@kieksme/swetrix-admin-mcp` | [![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=swetrix-admin&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBraWVrc21lL3N3ZXRyaXgtYWRtaW4tbWNwIl0sImVudiI6eyJTV0VUUklYX0FQSV9LRVkiOiJ5b3VyLWFwaS1rZXkiLCJTV0VUUklYX0FQSV9CQVNFX1VSTCI6Imh0dHBzOi8vYW5hbHl0aWNzLmV4YW1wbGUuY29tIn19) | [![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](vscode:mcp/install?%7B%22name%22%3A%22swetrix-admin%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40kieksme%2Fswetrix-admin-mcp%22%5D%2C%22env%22%3A%7B%22SWETRIX_API_KEY%22%3A%22your-api-key%22%2C%22SWETRIX_API_BASE_URL%22%3A%22https%3A%2F%2Fanalytics.example.com%22%7D%7D) |
+
 ## Packages
 
 | Package | Version | Security | Description |
