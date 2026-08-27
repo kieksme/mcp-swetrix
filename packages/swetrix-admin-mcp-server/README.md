@@ -2,6 +2,9 @@
 
 MCP server for the [Swetrix Admin API](https://swetrix.com/docs/admin-api) — 34 tools for managing projects, funnels, annotations, views, and organisations.
 
+[![Install in Cursor](https://cursor.com/deeplink/mcp-install-dark.svg)](cursor://anysphere.cursor-deeplink/mcp/install?name=swetrix-admin&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBraWVrc21lL3N3ZXRyaXgtYWRtaW4tbWNwIl0sImVudiI6eyJTV0VUUklYX0FQSV9LRVkiOiJ5b3VyLWFwaS1rZXkiLCJTV0VUUklYX0FQSV9CQVNFX1VSTCI6Imh0dHBzOi8vYW5hbHl0aWNzLmV4YW1wbGUuY29tIn19)
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](vscode:mcp/install?%7B%22name%22%3A%22swetrix-admin%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22%40kieksme%2Fswetrix-admin-mcp%22%5D%2C%22env%22%3A%7B%22SWETRIX_API_KEY%22%3A%22your-api-key%22%2C%22SWETRIX_API_BASE_URL%22%3A%22https%3A%2F%2Fanalytics.example.com%22%7D%7D)
+
 > **Note:** All tools require a valid `SWETRIX_API_KEY`. This server performs write operations — use with care.
 
 ## Installation
