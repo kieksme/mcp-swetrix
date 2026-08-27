@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-admin1.4.0...mcp-swetrix-admin1.4.1) (2026-08-27)
+
+
+### Bug Fixes
+
+* include LICENSE file in each published package tarball ([#28](https://github.com/kieksme/mcp-swetrix/issues/28)) ([a7c03c0](https://github.com/kieksme/mcp-swetrix/commit/a7c03c0dabe15fc0a4004a860f90589d52b8ca42))
+
 ## [1.4.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-admin1.3.1...mcp-swetrix-admin1.4.0) (2026-07-31)
 
 
