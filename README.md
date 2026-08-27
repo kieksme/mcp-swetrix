@@ -1,5 +1,7 @@
 # mcp-swetrix
 
+![Swetrix MCP](assets/readme-header.svg)
+
 MCP (Model Context Protocol) servers for the [Swetrix](https://swetrix.com) analytics platform. Lets AI assistants like Claude query analytics data, track events, and manage projects directly via the Swetrix API.
 
 [![CI](https://github.com/kieksme/mcp-swetrix/actions/workflows/ci.yml/badge.svg)](https://github.com/kieksme/mcp-swetrix/actions/workflows/ci.yml)
