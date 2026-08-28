@@ -182,6 +182,17 @@ claude mcp add --transport http swetrix-statistics https://mcp.example.com/mcp \
 }
 ```
 
+### Hosted pilot
+
+The repository is ready for a first single-tenant hosted pilot. Start with the
+Statistics server: keep `SWETRIX_API_KEY` and `MCP_HTTP_AUTH_TOKEN` in the
+hosting provider's secret store, expose `/mcp` only behind HTTPS, and use the
+unauthenticated `GET /health` endpoint as the provider health check. The
+current transport intentionally uses one Swetrix API key and one client token
+per deployment; multi-tenant accounts, billing, and per-customer key storage
+belong in a separate control plane before selling access to multiple
+customers. See [the hosted pilot runbook](docs/hosted-pilot.md).
+
 ### Security notes
 
 - The container listens on plain HTTP — always terminate TLS in front of it (reverse proxy, load balancer, or ingress) before exposing it beyond `localhost`.

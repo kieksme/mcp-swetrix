@@ -73,12 +73,15 @@ transport — useful for remote/containerized deployments.
 | `PORT` | No | Port to listen on in HTTP mode (default: `3000`) |
 | `MCP_HTTP_ENDPOINT` | No | Path the server listens on in HTTP mode (default: `/mcp`) |
 | `MCP_HTTP_AUTH_TOKEN` | Yes, in HTTP mode | Bearer token clients must send; the server refuses to start without it |
+| `HEALTH_ENDPOINT` | No | Unauthenticated hosting probe path (default: `/health`) |
 
 ```bash
 MCP_TRANSPORT=http PORT=3000 MCP_HTTP_AUTH_TOKEN=change-me node dist/index.js
 ```
 
 Every request must include `Authorization: Bearer <MCP_HTTP_AUTH_TOKEN>`; requests without a valid token receive `401 Unauthorized`.
+
+`GET /health` is the exception and returns `{"status":"ok"}` without authentication for hosting-provider probes.
 
 ```bash
 curl -X POST http://localhost:3000/mcp \

@@ -8,4 +8,5 @@ export const REQUEST_TIMEOUT_MS = 10_000;
 export const MCP_TRANSPORT = (process.env.MCP_TRANSPORT ?? "stdio").trim().toLowerCase();
 export const HTTP_PORT = Number(process.env.PORT ?? 3000);
 export const HTTP_ENDPOINT = process.env.MCP_HTTP_ENDPOINT ?? "/mcp";
+export const HEALTH_ENDPOINT = process.env.HEALTH_ENDPOINT ?? "/health";
 export const HTTP_AUTH_TOKEN = process.env.MCP_HTTP_AUTH_TOKEN;

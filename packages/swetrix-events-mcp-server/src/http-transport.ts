@@ -8,6 +8,7 @@ const MAX_BODY_BYTES = 10 * 1024 * 1024;
 export interface HttpTransportOptions {
   port: number;
   endpoint: string;
+  healthEndpoint?: string;
   authToken: string | undefined;
 }
 
@@ -62,7 +63,7 @@ async function readJsonBody(req: IncomingMessage): Promise<unknown> {
  * bound address or close it.
  */
 export async function startHttpTransport(buildServer: () => McpServer, options: HttpTransportOptions): Promise<Server> {
-  const { port, endpoint, authToken } = options;
+  const { port, endpoint, healthEndpoint = "/health", authToken } = options;
 
   if (!authToken) {
     console.error("ERROR: MCP_HTTP_AUTH_TOKEN environment variable is required when MCP_TRANSPORT=http");
@@ -71,12 +72,17 @@ export async function startHttpTransport(buildServer: () => McpServer, options: 
   const token: string = authToken;
 
   async function handleRequest(req: IncomingMessage, res: ServerResponse): Promise<void> {
+    const { pathname } = new URL(req.url ?? "/", "http://localhost");
+    if (req.method === "GET" && pathname === healthEndpoint) {
+      sendJson(res, 200, { status: "ok" });
+      return;
+    }
+
     if (!isAuthorized(req, token)) {
       sendJson(res, 401, { error: "Unauthorized" });
       return;
     }
 
-    const { pathname } = new URL(req.url ?? "/", "http://localhost");
     if (pathname !== endpoint) {
       sendJson(res, 404, { error: "Not Found" });
       return;

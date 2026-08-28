@@ -21,6 +21,12 @@ afterAll(() => {
 });
 
 describe("authentication", () => {
+  it("exposes an unauthenticated health check for hosting probes", async () => {
+    const res = await fetch(`${baseUrl}/health`);
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ status: "ok" });
+  });
+
   it("rejects requests without an Authorization header", async () => {
     const res = await fetch(`${baseUrl}${ENDPOINT}`, { method: "POST", body: "{}" });
     expect(res.status).toBe(401);
