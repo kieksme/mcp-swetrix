@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-admin1.4.0...mcp-swetrix-admin1.5.0) (2026-09-14)
+
+
+### Features
+
+* **config:** add Codex and Copilot MCP configurations ([a810458](https://github.com/kieksme/mcp-swetrix/commit/a8104588afb1edd7e96f019f80fcf66b1fc4f819))
+* prepare Swetrix hosted pilot ([24aefe7](https://github.com/kieksme/mcp-swetrix/commit/24aefe7a3afd3e7f83926771cd2e68d51dbda565))
+
+
+### Bug Fixes
+
+* include LICENSE file in each published package tarball ([#28](https://github.com/kieksme/mcp-swetrix/issues/28)) ([a7c03c0](https://github.com/kieksme/mcp-swetrix/commit/a7c03c0dabe15fc0a4004a860f90589d52b8ca42))
+
 ## [1.4.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-admin1.3.1...mcp-swetrix-admin1.4.0) (2026-07-31)
 
 
