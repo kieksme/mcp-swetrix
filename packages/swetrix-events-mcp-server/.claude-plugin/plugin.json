@@ -16,5 +16,20 @@
     "analytics",
     "tracking",
     "events"
-  ]
+  ],
+  "userConfig": {
+    "api_key": {
+      "type": "string",
+      "title": "Swetrix API key",
+      "description": "API key used to send events",
+      "sensitive": true,
+      "required": true
+    },
+    "api_base_url": {
+      "type": "string",
+      "title": "Swetrix API base URL",
+      "description": "Defaults to https://api.swetrix.com",
+      "required": false
+    }
+  }
 }

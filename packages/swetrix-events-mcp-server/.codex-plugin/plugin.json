@@ -1,0 +1,19 @@
+{
+  "name": "swetrix-events",
+  "version": "1.4.0",
+  "description": "Track pageviews, custom events, heartbeats, errors, and revenue in Swetrix.",
+  "author": { "name": "kieksme", "url": "https://github.com/kieksme" },
+  "homepage": "https://swetrix.com/docs/events-api",
+  "repository": "https://github.com/kieksme/mcp-swetrix",
+  "license": "GPL-3.0-only",
+  "keywords": ["mcp", "swetrix", "analytics", "tracking", "events"],
+  "mcpServers": "./mcp.json",
+  "interface": {
+    "displayName": "Swetrix Events",
+    "shortDescription": "Send events to Swetrix",
+    "longDescription": "Track pageviews, custom events, heartbeats, errors, and revenue in Swetrix.",
+    "developerName": "kieksme",
+    "category": "Analytics",
+    "capabilities": ["Write"]
+  }
+}

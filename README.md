@@ -29,6 +29,13 @@ Each server can be installed directly into Cursor or VS Code. These buttons pref
 
 Each package can be used standalone. Pick the one(s) you need.
 
+The repository includes a Claude Code plugin marketplace for all three packages:
+
+```text
+/plugin marketplace add kieksme/mcp-swetrix
+/plugin install swetrix-statistics@mcp-swetrix
+```
+
 ### Claude Desktop
 
 Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
@@ -181,6 +188,23 @@ claude mcp add --transport http swetrix-statistics https://mcp.example.com/mcp \
   }
 }
 ```
+
+### ChatGPT, Codex, and GitHub Copilot
+
+ChatGPT: add each public HTTPS `/mcp` endpoint as a custom MCP app/connector and provide its bearer token. ChatGPT cannot reach `localhost`.
+
+Codex:
+
+```bash
+codex mcp add swetrix-statistics --url https://<host>/mcp \
+  --bearer-token-env-var SWETRIX_STATISTICS_MCP_TOKEN
+codex mcp add swetrix-events --url https://<host>/mcp \
+  --bearer-token-env-var SWETRIX_EVENTS_MCP_TOKEN
+codex mcp add swetrix-admin --url https://<host>/mcp \
+  --bearer-token-env-var SWETRIX_ADMIN_MCP_TOKEN
+```
+
+GitHub Copilot uses `.vscode/mcp.json` for local VS Code and `.github/mcp.json` for Copilot Cloud Agent/Copilot CLI. Configure the six `COPILOT_MCP_SWETRIX_*` URL/token variables in the Copilot environment.
 
 ### Hosted pilot
 

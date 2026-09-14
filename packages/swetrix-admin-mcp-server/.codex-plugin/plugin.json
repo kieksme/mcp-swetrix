@@ -1,0 +1,19 @@
+{
+  "name": "swetrix-admin",
+  "version": "1.4.0",
+  "description": "Manage Swetrix projects, funnels, annotations, views, and organisations.",
+  "author": { "name": "kieksme", "url": "https://github.com/kieksme" },
+  "homepage": "https://swetrix.com/docs/admin-api",
+  "repository": "https://github.com/kieksme/mcp-swetrix",
+  "license": "GPL-3.0-only",
+  "keywords": ["mcp", "swetrix", "analytics", "admin", "projects"],
+  "mcpServers": "./mcp.json",
+  "interface": {
+    "displayName": "Swetrix Admin",
+    "shortDescription": "Manage Swetrix projects",
+    "longDescription": "Manage Swetrix projects, funnels, annotations, views, and organisations through MCP.",
+    "developerName": "kieksme",
+    "category": "Analytics",
+    "capabilities": ["Read", "Write"]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "swetrix-statistics": {
+      "type": "http",
+      "url": "${COPILOT_MCP_SWETRIX_STATISTICS_URL}",
+      "headers": { "Authorization": "Bearer ${COPILOT_MCP_SWETRIX_STATISTICS_TOKEN}" },
+      "tools": ["*"]
+    },
+    "swetrix-events": {
+      "type": "http",
+      "url": "${COPILOT_MCP_SWETRIX_EVENTS_URL}",
+      "headers": { "Authorization": "Bearer ${COPILOT_MCP_SWETRIX_EVENTS_TOKEN}" },
+      "tools": ["*"]
+    },
+    "swetrix-admin": {
+      "type": "http",
+      "url": "${COPILOT_MCP_SWETRIX_ADMIN_URL}",
+      "headers": { "Authorization": "Bearer ${COPILOT_MCP_SWETRIX_ADMIN_TOKEN}" },
+      "tools": ["*"]
+    }
+  }
+}

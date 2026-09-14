@@ -1,0 +1,32 @@
+{
+  "inputs": [
+    { "type": "promptString", "id": "swetrix_api_key", "description": "Swetrix API key", "password": true },
+    { "type": "promptString", "id": "swetrix_api_base_url", "description": "Swetrix API base URL", "default": "https://api.swetrix.com" }
+  ],
+  "servers": {
+    "swetrix-statistics": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@kieksme/swetrix-statistics-mcp"],
+      "env": {
+        "SWETRIX_API_KEY": "${input:swetrix_api_key}",
+        "SWETRIX_API_BASE_URL": "${input:swetrix_api_base_url}"
+      }
+    },
+    "swetrix-events": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@kieksme/swetrix-events-mcp"],
+      "env": { "SWETRIX_API_BASE_URL": "${input:swetrix_api_base_url}" }
+    },
+    "swetrix-admin": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@kieksme/swetrix-admin-mcp"],
+      "env": {
+        "SWETRIX_API_KEY": "${input:swetrix_api_key}",
+        "SWETRIX_API_BASE_URL": "${input:swetrix_api_base_url}"
+      }
+    }
+  }
+}

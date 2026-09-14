@@ -1,0 +1,19 @@
+{
+  "name": "swetrix-statistics",
+  "version": "1.4.0",
+  "description": "Read-only Swetrix analytics queries for traffic, performance, errors, funnels, and goals.",
+  "author": { "name": "kieksme", "url": "https://github.com/kieksme" },
+  "homepage": "https://swetrix.com/docs/statistics-api",
+  "repository": "https://github.com/kieksme/mcp-swetrix",
+  "license": "GPL-3.0-only",
+  "keywords": ["mcp", "swetrix", "analytics", "statistics", "traffic"],
+  "mcpServers": "./mcp.json",
+  "interface": {
+    "displayName": "Swetrix Statistics",
+    "shortDescription": "Query Swetrix analytics",
+    "longDescription": "Read traffic, performance, error, funnel, goal, profile, and filter analytics from Swetrix.",
+    "developerName": "kieksme",
+    "category": "Analytics",
+    "capabilities": ["Read"]
+  }
+}

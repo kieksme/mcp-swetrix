@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "swetrix-events": {
+      "command": "npx",
+      "args": ["-y", "@kieksme/swetrix-events-mcp"]
+    }
+  }
+}
