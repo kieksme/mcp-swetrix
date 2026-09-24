@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.5.1](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-statistics1.5.0...mcp-swetrix-statistics1.5.1) (2026-09-24)
+
+
+### Bug Fixes
+
+* **mcp-swetrix-statistics:** serialize query arrays correctly ([b3c54f6](https://github.com/kieksme/mcp-swetrix/commit/b3c54f66965fe47778a04bc8279cda914fb40ea6))
+* **mcp-swetrix-statistics:** serialize query arrays correctly ([ee9ed33](https://github.com/kieksme/mcp-swetrix/commit/ee9ed33027c362005f516ef2320a8a6029b2cef4))
+
 ## [1.5.0](https://github.com/kieksme/mcp-swetrix/compare/mcp-swetrix-statistics1.4.0...mcp-swetrix-statistics1.5.0) (2026-09-14)
 
 
