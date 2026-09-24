@@ -8,10 +8,10 @@ name: Release Please
 # Note: publish.yml handles only manual emergency re-publishes.
 # A separate release: types: [published] trigger cannot be used here
 # because releases created via GITHUB_TOKEN do not fire cross-workflow events.
+# Each npm package needs a Trusted Publisher for kieksme/mcp-swetrix and
+# this workflow file, with direct npm publish allowed.
 #
-# Runner selection:
-#   repository variable RELEASE_PLEASE_RUNNER  – set in Settings → Variables
-#   fallback:           ubuntu-latest
+# The npm publish job must use GitHub-hosted runners for OIDC trusted publishing.
 on:
   push:
     branches: [main]
@@ -48,7 +48,7 @@ jobs:
       needs.release-please.outputs.events_released == 'true' ||
       needs.release-please.outputs.admin_released == 'true' ||
       needs.release-please.outputs.statistics_released == 'true'
-    runs-on: ${{ vars.PUBLISH_RUNNER || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -58,28 +58,30 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
+
+      - name: Install npm with Trusted Publishing support
+        run: npm install --global npm@11.15.0
 
       - name: Publish to npm
         env:
           EVENTS_RELEASED:     ${{ needs.release-please.outputs.events_released }}
           ADMIN_RELEASED:      ${{ needs.release-please.outputs.admin_released }}
           STATISTICS_RELEASED: ${{ needs.release-please.outputs.statistics_released }}
-          NODE_AUTH_TOKEN:     ${{ secrets.NPM_TOKEN }}
         run: |
           pub() {
             local name="$1"
-            echo "▶ Publishing $name to npm…"
+            local directory="$2"
+            echo "▶ Publishing $name to npm with GitHub OIDC…"
             pnpm --filter "$name" install
             pnpm --filter "$name" test
-            # publishConfig.provenance: true in package.json requests the OIDC attestation
-            pnpm --filter "$name" publish --no-git-checks
+            (cd "$directory" && npm publish --access public)
           }
-          [[ "$EVENTS_RELEASED"     == "true" ]] && pub "@kieksme/swetrix-events-mcp"
-          [[ "$ADMIN_RELEASED"      == "true" ]] && pub "@kieksme/swetrix-admin-mcp"
-          [[ "$STATISTICS_RELEASED" == "true" ]] && pub "@kieksme/swetrix-statistics-mcp"
+          [[ "$EVENTS_RELEASED"     == "true" ]] && pub "@kieksme/swetrix-events-mcp" "packages/swetrix-events-mcp-server"
+          [[ "$ADMIN_RELEASED"      == "true" ]] && pub "@kieksme/swetrix-admin-mcp" "packages/swetrix-admin-mcp-server"
+          [[ "$STATISTICS_RELEASED" == "true" ]] && pub "@kieksme/swetrix-statistics-mcp" "packages/swetrix-statistics-mcp-server"
 
       - uses: actions/setup-node@v4
         with:

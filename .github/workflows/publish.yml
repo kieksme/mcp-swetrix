@@ -6,23 +6,13 @@ name: Publish (manual)
 # Why no release: types: [published] trigger here?
 # Releases created by release-please use GITHUB_TOKEN, which does not
 # fire cross-workflow events by design (GitHub prevents accidental loops).
-# The publish job therefore lives in release-please.yml where it has
-# direct access to the release-please outputs.
+# The automatic publish job therefore lives in release-please.yml, where it
+# has direct access to the release-please outputs.
 #
-# Runner selection (first match wins):
-#   1. workflow_dispatch input `runner`       – per-run override
-#   2. repository variable     PUBLISH_RUNNER – set in Settings → Variables
-#   3. fallback                ubuntu-latest
 #
-# Self-hosted requirements:
-#   - Network access to registry.npmjs.org and npm.pkg.github.com
-#   - Network access to token.actions.githubusercontent.com (OIDC for npm provenance)
-#     If OIDC is unavailable, set publishConfig.provenance to false in each
-#     package.json and remove the id-token: write permission below.
-#
-# NPM_TOKEN must be an Automation token (npmjs.com → Access Tokens) scoped to
-# the @kieksme org. A Granular token cannot publish packages created after the
-# token was issued.
+# npmjs.com must list kieksme/mcp-swetrix with workflow file `publish.yml` as a
+# Trusted Publisher for each package; direct npm publishing must be allowed.
+# GitHub-hosted runners are required for npm Trusted Publishing.
 on:
   workflow_dispatch:
     inputs:
@@ -34,20 +24,15 @@ on:
           - "@kieksme/swetrix-events-mcp"
           - "@kieksme/swetrix-admin-mcp"
           - "@kieksme/swetrix-statistics-mcp"
-      runner:
-        description: "Runner override (e.g. self-hosted or ubuntu-latest)"
-        required: false
-        default: ""
-        type: string
 
 permissions:
   contents: read
-  id-token: write   # OIDC token for npm provenance — requires token.actions.githubusercontent.com
+  id-token: write   # OIDC token for npm Trusted Publishing
   packages: write   # publish to GitHub Packages
 
 jobs:
   publish:
-    runs-on: ${{ inputs.runner || vars.PUBLISH_RUNNER || 'ubuntu-latest' }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
@@ -77,9 +62,11 @@ jobs:
             *) echo "Unknown package: $NAME" && exit 1 ;;
           esac
 
-          echo "name=$NAME"   >> "$GITHUB_OUTPUT"
-          echo "dir=$DIR"     >> "$GITHUB_OUTPUT"
-          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+          {
+            echo "name=$NAME"
+            echo "dir=$DIR"
+            echo "image=$IMAGE"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Resolve version
         id: ver
@@ -91,9 +78,12 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           cache: "pnpm"
           registry-url: "https://registry.npmjs.org"
+
+      - name: Install npm with Trusted Publishing support
+        run: npm install --global npm@11.15.0
 
       - run: pnpm --filter "${{ steps.pkg.outputs.name }}" install
       - run: pnpm --filter "${{ steps.pkg.outputs.name }}" test
@@ -101,12 +91,10 @@ jobs:
       - name: Publish to npm
         working-directory: ${{ steps.pkg.outputs.dir }}
         run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "24"
           registry-url: "https://npm.pkg.github.com"
 
       - name: Publish to GitHub Packages
