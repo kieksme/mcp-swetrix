@@ -23,7 +23,7 @@ export const FilterSchema = z.object({
     "Dimension: cc=country, rg=region, ct=city, pg=page, br=browser, os=OS, dv=device, ref=referrer, so=source, me=medium, ca=campaign"
   ),
   filter: z.string().describe("Filter value"),
-  isExclusive: z.boolean().describe("Exclude matching rows instead of including them"),
+  isExclusive: z.boolean().describe("Include only matching rows when true; include all other rows when false"),
   isContains: z.boolean().optional().describe("Use substring match instead of exact match"),
 });
 

@@ -1,12 +1,13 @@
 import { type McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { type AxiosInstance } from "axios";
 import { z } from "zod";
-import { BaseQuerySchema } from "../schemas/common.js";
+import { BaseQuerySchema, FilterSchema, TimeBucketSchema } from "../schemas/common.js";
 import { formatApiError, truncate } from "../services/api-client.js";
 import { CHARACTER_LIMIT } from "../constants.js";
 
 const EventQueryBase = BaseQuerySchema.omit({ filters: true }).extend({
-  filters: z.array(z.object({ column: z.string(), filter: z.string(), isExclusive: z.boolean() })).optional(),
+  timeBucket: TimeBucketSchema,
+  filters: z.array(FilterSchema).optional(),
 });
 
 export function registerEventTools(server: McpServer, client: AxiosInstance): void {
@@ -22,6 +23,7 @@ Returns arrays of key, value and count for the event's metadata.
 Args:
   - pid: Project ID (required)
   - event: Custom event name (required)
+  - timeBucket: Time granularity (required)
   - period / from / to, timezone, filters: Standard options`,
       inputSchema: EventQueryBase.extend({
         event: z.string().min(1).describe("Custom event name to inspect"),
@@ -50,6 +52,7 @@ Returns key, value and count arrays for the specified property.
 Args:
   - pid: Project ID (required)
   - property: Custom property name (required)
+  - timeBucket: Time granularity (required)
   - period / from / to, timezone, filters: Standard options`,
       inputSchema: EventQueryBase.extend({
         property: z.string().min(1).describe("Custom property name to aggregate by"),
@@ -76,6 +79,7 @@ Args:
 Args:
   - pid: Project ID (required)
   - customEvents: JSON-stringified array of event names e.g. '["signup","purchase"]' (required)
+  - timeBucket: Time granularity (required)
   - period / from / to, timezone, filters: Standard options`,
       inputSchema: EventQueryBase.extend({
         customEvents: z.string().describe('JSON-stringified array of event names, e.g. \'["signup","purchase"]\''),
