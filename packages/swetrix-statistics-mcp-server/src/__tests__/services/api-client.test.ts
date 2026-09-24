@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatApiError, truncate } from "../../services/api-client.js";
+import { createApiClient, formatApiError, truncate } from "../../services/api-client.js";
 import { AxiosError } from "axios";
 
 function makeAxiosError(status: number): AxiosError {
@@ -10,6 +10,11 @@ function makeAxiosError(status: number): AxiosError {
 
 describe("formatApiError", () => {
   it("formats 400", () => expect(formatApiError(makeAxiosError(400))).toContain("400"));
+  it("includes the API's 400 message", () => {
+    const err = makeAxiosError(400);
+    err.response!.data = { message: "timeBucket should not be empty" };
+    expect(formatApiError(err)).toContain("timeBucket should not be empty");
+  });
   it("formats 401", () => expect(formatApiError(makeAxiosError(401))).toContain("401"));
   it("formats 403", () => expect(formatApiError(makeAxiosError(403))).toContain("403"));
   it("formats 404", () => expect(formatApiError(makeAxiosError(404))).toContain("404"));
@@ -28,6 +33,23 @@ describe("formatApiError", () => {
 
   it("formats generic Error", () => expect(formatApiError(new Error("boom"))).toContain("boom"));
   it("formats a non-Error thrown value", () => expect(formatApiError("boom")).toContain("boom"));
+});
+
+describe("createApiClient query serialization", () => {
+  it("serializes arrays and nested filters as JSON query values", () => {
+    const client = createApiClient("test-key");
+    const url = new URL(client.getUri({
+      url: "/v1/log/birdseye",
+      params: {
+        pids: ["p1", "p2"],
+        filters: [{ column: "cc", filter: "DE", isExclusive: true }],
+      },
+    }));
+
+    expect(url.searchParams.get("pids")).toBe('["p1","p2"]');
+    expect(url.searchParams.get("filters")).toBe('[{"column":"cc","filter":"DE","isExclusive":true}]');
+    expect(url.searchParams.has("pids[]")).toBe(false);
+  });
 });
 
 describe("truncate", () => {
