@@ -229,6 +229,14 @@ customers. See [the hosted pilot runbook](docs/hosted-pilot.md).
 
 For development setup and contribution workflow, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 💬 Support
+
+Questions or feedback? Visit the template forums on Railway Central Station:
+
+- [Swetrix Admin MCP](https://station.railway.com/templates/swetrix-admin-mcp-b66027b3)
+- [Swetrix Events MCP](https://station.railway.com/templates/swetrix-events-mcp-68fb9e7d)
+- [Swetrix Statistics MCP](https://station.railway.com/templates/swetrix-statistics-mcp-29553432)
+
 ## License
 
 GPL-3.0-only — see [LICENSE](LICENSE)
